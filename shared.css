@@ -1,0 +1,245 @@
+/* ═══════════════════════════════════════
+   shared.css — TikTok Login Prototype
+   Used by: index.html, flow1.html,
+            flow2.html, flow3.html
+   ═══════════════════════════════════════ */
+
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('Assets/fonts/webfonts/TikTokSans[opsz,slnt,wdth,wght].woff2') format('woff2-variations'),
+       url('Assets/fonts/variable/TikTokSans[opsz,slnt,wdth,wght].ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal oblique;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body { margin: 0; padding: 0; }
+
+.scale-wrapper { width: 100%; overflow: hidden; position: relative; }
+
+.tt-root {
+  width: 100vw; height: 100vh; background: white;
+  display: flex; flex-direction: row; align-items: flex-start;
+  position: relative; overflow: hidden;
+  font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── SIDEBAR ── */
+.tt-sidebar {
+  width: 240px; background: white;
+  display: flex; flex-direction: column; gap: 12px;
+  margin: 16px 20px; flex-shrink: 0; z-index: 10;
+}
+.tt-nav-container { padding: 12px 0 12px 9px; }
+.tt-search {
+  background: rgba(0,0,0,0.05); border-radius: 100px;
+  height: 40px; display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px; color: rgba(0,0,0,0.34); font-size: 14px;
+}
+.tt-nav-section { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+.tt-nav-items { display: flex; flex-direction: column; gap: 4px; }
+.tt-nav-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 8px; border-radius: 10px; cursor: pointer;
+  color: #202020; font-size: 16px; font-weight: 600; text-decoration: none;
+}
+.tt-nav-item:hover { background: rgba(0,0,0,0.05); }
+.tt-nav-icon {
+  width: 24px; height: 24px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.tt-left-nav-btn {
+  background: #FE2C55; color: white; border: none; border-radius: 8px;
+  height: 48px; font-size: 16px; font-weight: 600; cursor: pointer;
+  width: 100%; font-family: inherit; transition: background 0.15s ease;
+}
+.tt-left-nav-btn:hover { background: #E5284D; }
+.tt-divider { height: 1px; background: rgba(0,0,0,0.1); }
+.tt-footer { font-size: 12px; color: rgba(0,0,0,0.48); line-height: 1.6; padding: 4px 8px; }
+.tt-footer-links { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; font-weight: 500; }
+
+/* ── MAIN / PAGE ── */
+.tt-page {
+  flex: 1; min-width: 0; align-self: stretch; position: relative;
+  padding: 16px 0; display: flex; align-items: center; justify-content: center;
+}
+.tt-page img { height: 100%; object-fit: cover; display: block; }
+
+/* ── TOOLBAR ── */
+.tt-topnav {
+  position: absolute; display: flex; flex-direction: column;
+  align-items: flex-end; z-index: 100; top: 16px; right: 20px;
+  font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.toolbar {
+  background: white; border-radius: 99px;
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.07);
+  display: flex; align-items: center; gap: 12px; padding: 6px;
+}
+.toolbar-pills { display: flex; align-items: center; }
+.toolbar-pill-btn {
+  height: 32px; display: flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border-radius: 999px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.09px;
+  color: #202020; background: white; border: none;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.toolbar-pill-btn:hover { background: rgba(0,0,0,0.05); }
+.toolbar-pill-btn img { width: 16px; height: 16px; display: block; flex-shrink: 0; }
+.toolbar-login-btn {
+  background: #FE2C55; color: white; border: none; border-radius: 999px;
+  height: 32px; padding: 0 16px;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.09px;
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.toolbar-login-btn:hover { background: #E5284D; }
+
+/* ── SHARED INPUT STYLES ── */
+input { caret-color: #FE2C55; }
+@supports (caret-width: 2px) { input { caret-width: 2px; } }
+input:focus { outline: none; }
+
+.pin-box { caret-color: #FE2C55; }
+.phone-num-input, .form-input, .pw-input { caret-color: #FE2C55; }
+
+/* Segmented control */
+.seg-control {
+  display: flex; align-items: center;
+  background: rgba(0,0,0,0.05); border-radius: 999px;
+  padding: 3px; width: fit-content; margin: 0 auto;
+}
+.seg-btn {
+  padding: 7.5px 14px; border-radius: 999px; border: none;
+  background: transparent; font-family: inherit;
+  font-size: 15px; font-weight: 600; color: rgba(0,0,0,0.48);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.seg-btn.active { background: white; color: #000; box-shadow: 0px 2px 8px rgba(0,0,0,0.06); }
+
+/* Phone row */
+.phone-row {
+  display: flex; align-items: center;
+  background: rgba(0,0,0,0.05); border-radius: 10px;
+  height: 48px; overflow: hidden; transition: box-shadow 0.15s;
+}
+.phone-country {
+  display: flex; align-items: center; padding: 0 12px;
+  font-size: 16px; color: #000;
+  border-right: 0.5px solid rgba(0,0,0,0.17);
+  height: 20px; flex-shrink: 0; white-space: nowrap;
+}
+.phone-num-input {
+  flex: 1; height: 100%; border: none; background: transparent;
+  padding: 0 12px; font-size: 16px; font-family: inherit;
+  color: #202020; outline: none; caret-color: #FE2C55;
+}
+.phone-num-input::placeholder { color: rgba(0,0,0,0.34); }
+
+/* Form input */
+.form-input {
+  width: 100%; height: 48px; background: rgba(0,0,0,0.05);
+  border: none; border-radius: 10px; padding: 0 16px;
+  font-size: 16px; font-family: inherit; color: #202020;
+  outline: none; caret-color: #FE2C55; transition: background 0.15s;
+}
+.form-input::placeholder { color: rgba(0,0,0,0.34); }
+.form-input:focus { background: rgba(0,0,0,0.05); box-shadow: none; }
+
+/* Password input */
+.pw-input-wrap { position: relative; }
+.pw-input {
+  width: 100%; height: 48px; background: rgba(0,0,0,0.05);
+  border: none; border-radius: 10px; padding: 0 48px 0 16px;
+  font-size: 16px; font-family: inherit; color: #202020;
+  outline: none; caret-color: #FE2C55; transition: background 0.15s;
+}
+.pw-input::placeholder { color: rgba(0,0,0,0.34); }
+.pw-input:focus { background: rgba(0,0,0,0.05); box-shadow: none; }
+.pw-toggle-btn {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.pw-toggle-icon img { width: 30px; height: 30px; display: block; opacity: 0.48; }
+.pw-toggle-icon:hover img { opacity: 0.72; }
+
+/* Link button */
+.use-pw-link {
+  background: none; border: none; font-family: inherit;
+  font-size: 14px; font-weight: 600; color: rgba(0,0,0,0.48);
+  cursor: pointer; text-align: left; padding: 0 8px;
+  text-decoration: none;
+}
+.use-pw-link:hover { color: #FE2C55; text-decoration: underline; }
+
+/* Inline text-link buttons (Forgot password, Use code, Use password, ← Back, etc.) */
+.tt-text-link { text-decoration: none; }
+.tt-text-link:hover { text-decoration: underline; }
+
+/* Sign-up / Log-in spans at bottom of panels */
+.login-panel-signup span:hover,
+.qr-signup span:hover { text-decoration: underline; }
+
+/* Continue / primary button */
+.continue-btn {
+  width: 100%; height: 52px;
+  background: rgba(254,44,85,0.4); color: white;
+  border: none; border-radius: 999px;
+  font-size: 16px; font-weight: 600; font-family: inherit;
+  cursor: not-allowed; transition: background 0.2s;
+}
+.continue-btn.ready { background: #FE2C55; cursor: pointer; }
+.continue-btn.ready:hover { background: #E5284D; }
+
+/* PIN boxes */
+.pin-row { display: flex; gap: 6px; justify-content: center; }
+.pin-box {
+  width: 45px; height: 52px;
+  background: rgba(0,0,0,0.05); border: none; border-radius: 10px;
+  text-align: center; font-size: 20px; font-weight: 600;
+  font-family: inherit; color: #202020; outline: none;
+  caret-color: #FE2C55; transition: box-shadow 0.15s;
+}
+.pin-box:focus { box-shadow: inset 0 0 0 1.5px #FE2C55; outline: none; }
+
+/* Option buttons (Flow 1 style) */
+.login-panel-option-btn {
+  width: 100%; height: 52px; background: rgba(0,0,0,0.05);
+  border: none; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; cursor: pointer; font-family: inherit;
+  font-size: 15px; font-weight: 600; color: #000; transition: background 0.15s;
+}
+.login-panel-option-btn:hover { background: rgba(0,0,0,0.10); }
+.login-panel-option-icon {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+}
+.login-panel-option-icon img { width: 20px; height: 20px; display: block; }
+
+/* Terms block (Flow 1 absolute pinned) */
+.screen-terms-block {
+  position: absolute; bottom: 52px; left: 0; right: 0;
+  font-size: 10px; color: rgba(0,0,0,0.48);
+  line-height: 1.4; text-align: center; padding: 0 32px;
+}
+.screen-terms-block a { color: #2B5DB9; text-decoration: none; }
+
+.screen-title {
+  padding: 64px 32px 32px; text-align: center;
+  font-size: 28px; font-weight: 700; color: #000;
+  line-height: 1.2; flex-shrink: 0;
+}
+
+/* Peephole button */
+#peepholeBtn {
+  position: fixed; bottom: 24px; right: 24px;
+  width: 48px; height: 48px; background: white;
+  border-radius: 999px; box-shadow: 0px 4px 16px rgba(0,0,0,0.15);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 99999; border: none; transition: box-shadow 0.2s;
+}
