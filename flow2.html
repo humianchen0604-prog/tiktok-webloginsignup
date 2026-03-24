@@ -203,42 +203,53 @@
           </div>
 
           <!-- Phone view -->
-          <div id="f2PhoneView" style="display:flex;flex-direction:column;gap:12px;height:100%;overflow:hidden;">
-            <div class="phone-row" style="border-radius:999px;height:44px;flex-shrink:0;">
-              <div id="f2CountrySelectorPhone" class="phone-country" onclick="f2ToggleDropdown(event,'f2CountrySelectorPhone')" onmouseenter="this.style.background='rgba(0,0,0,0.07)'" onmouseleave="this.style.background='transparent'" style="font-size:14px;cursor:pointer;border-radius:999px 0 0 999px;transition:background 0.15s;height:100%;box-sizing:border-box;gap:4px;"><span id="f2CountryTextPhone">US +1</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-              <input class="phone-num-input" id="wide2PhoneInput" type="tel" maxlength="10" placeholder="Phone Number" oninput="checkWide2PhoneReady()" />
+          <div id="f2PhoneView" style="display:flex;flex-direction:column;height:100%;overflow:hidden;">
+            <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0;">
+              <div class="phone-row" style="border-radius:999px;height:44px;flex-shrink:0;">
+                <div id="f2CountrySelectorPhone" class="phone-country" onclick="f2ToggleDropdown(event,'f2CountrySelectorPhone')" onmouseenter="this.style.background='rgba(0,0,0,0.07)'" onmouseleave="this.style.background='transparent'" style="font-size:14px;cursor:pointer;border-radius:999px 0 0 999px;transition:background 0.15s;height:100%;box-sizing:border-box;gap:4px;"><span id="f2CountryTextPhone">US +1</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <input class="phone-num-input" id="wide2PhoneInput" type="tel" maxlength="10" placeholder="Phone Number" oninput="checkWide2PhoneReady()" />
+              </div>
+              <div style="padding-left:8px;flex-shrink:0;">
+                <button class="tt-text-link" onclick="showWide2PassView()" style="background:none;border:none;font-family:inherit;font-size:12px;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Use password</button>
+              </div>
             </div>
-            <div style="padding-left:8px;flex-shrink:0;">
-              <button class="tt-text-link" onclick="showWide2PassView()" style="background:none;border:none;font-family:inherit;font-size:12px;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Use password</button>
-            </div>
-            <button id="wide2PhoneLoginBtn" onclick="goWide2PinView()" style="margin-top:auto; width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;">Log in</button>
-            <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;">
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Google.svg" width="22" height="22" alt="" /></button>
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Facebook.svg" width="22" height="22" alt="" /></button>
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Apple.svg" width="22" height="22" alt="" /></button>
+          
+            <div style="margin-top:auto;display:flex;flex-direction:column;gap:20px;flex-shrink:0;">
+              <button id="wide2PhoneLoginBtn" onclick="goWide2PinView()" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;">Log in</button>
+              <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;">
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Google.svg" width="22" height="22" alt="" /></button>
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Facebook.svg" width="22" height="22" alt="" /></button>
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Apple.svg" width="22" height="22" alt="" /></button>
+              </div>
             </div>
           </div>
 
           <!-- Phone+Password view -->
-          <div id="f2PassView" style="display:none;flex-direction:column;gap:12px;height:100%;overflow:hidden;">
-            <div class="phone-row" style="border-radius:999px;height:44px;flex-shrink:0;">
-              <div id="f2CountrySelectorPass" class="phone-country" onclick="f2ToggleDropdown(event,'f2CountrySelectorPass')" onmouseenter="this.style.background='rgba(0,0,0,0.07)'" onmouseleave="this.style.background='transparent'" style="font-size:14px;cursor:pointer;border-radius:999px 0 0 999px;transition:background 0.15s;height:100%;box-sizing:border-box;gap:4px;"><span id="f2CountryTextPass">US +1</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-              <input class="phone-num-input" id="wide2PassPhoneInput" type="tel" maxlength="10" placeholder="Phone Number" oninput="checkWide2PassReady()" />
+          <div id="f2PassView" style="display:none;flex-direction:column;height:100%;overflow:hidden;">
+            <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0;">
+              <div class="phone-row" style="border-radius:999px;height:44px;flex-shrink:0;">
+                <div id="f2CountrySelectorPass" class="phone-country" onclick="f2ToggleDropdown(event,'f2CountrySelectorPass')" onmouseenter="this.style.background='rgba(0,0,0,0.07)'" onmouseleave="this.style.background='transparent'" style="font-size:14px;cursor:pointer;border-radius:999px 0 0 999px;transition:background 0.15s;height:100%;box-sizing:border-box;gap:4px;"><span id="f2CountryTextPass">US +1</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <input class="phone-num-input" id="wide2PassPhoneInput" type="tel" maxlength="10" placeholder="Phone Number" oninput="checkWide2PassReady()" />
+              </div>
+          
+              <div class="pw-input-wrap" style="flex-shrink:0;">
+                <input class="pw-input" id="wide2PassInput" type="password" placeholder="Password" style="border-radius:999px;height:44px;" oninput="checkWide2PassReady()" />
+                <button class="pw-toggle-btn pw-toggle-icon" onclick="toggleWidePw('wide2PassInput',this)"><img src="Assets/Icons/Eye_Close.svg" width="20" height="20" style="opacity:0.48;" alt="toggle" /></button>
+              </div>
+          
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0 8px;flex-shrink:0;height:18px;">
+                <button class="tt-text-link" onclick="showWide2PhoneView()" style="background:none;border:none;font-family:inherit;font-size:12px;line-height:1;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Use code</button>
+                <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:12px;line-height:1;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Forgot password?</button>
+              </div>
             </div>
-            <div class="pw-input-wrap" style="flex-shrink:0;">
-              <input class="pw-input" id="wide2PassInput" type="password" placeholder="Password" style="border-radius:999px;height:44px;" oninput="checkWide2PassReady()" />
-              <button class="pw-toggle-btn pw-toggle-icon" onclick="toggleWidePw('wide2PassInput',this)"><img src="Assets/Icons/Eye_Close.svg" width="20" height="20" style="opacity:0.48;" alt="toggle" /></button>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:0 8px;flex-shrink:0;">
-              <button class="tt-text-link" onclick="showWide2PhoneView()" style="background:none;border:none;font-family:inherit;font-size:12px;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Use code</button>
-              <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:12px;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Forgot password?</button>
-            </div>
-            
-            <button id="wide2PassLoginBtn" style="margin-top:auto;width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;">Log in</button>
-            <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;padding-bottom:2px;">
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Google.svg" width="22" height="22" alt="" /></button>
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Facebook.svg" width="22" height="22" alt="" /></button>
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Apple.svg" width="22" height="22" alt="" /></button>
+          
+            <div style="margin-top:auto;display:flex;flex-direction:column;gap:20px;flex-shrink:0;">
+              <button id="wide2PassLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;">Log in</button>
+              <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;">
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Google.svg" width="22" height="22" alt="" /></button>
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Facebook.svg" width="22" height="22" alt="" /></button>
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Apple.svg" width="22" height="22" alt="" /></button>
+              </div>
             </div>
           </div>
 
@@ -261,20 +272,27 @@
           </div>
 
           <!-- Email view -->
-          <div id="f2EmailView" style="display:none;flex-direction:column;gap:12px;height:100%;overflow:hidden;">
-            <input type="text" placeholder="Email or username" id="wide2EmailInput" oninput="checkWide2EmailReady()" style="width:100%;height:44px;flex-shrink:0;background:rgba(0,0,0,0.05);border:none;border-radius:999px;padding:0 16px;font-size:14px;font-family:inherit;color:rgba(0,0,0,0.34);outline:none;caret-color:#FE2C55;" />
-            <div class="pw-input-wrap" style="flex-shrink:0;">
-              <input class="pw-input" id="wide2EmailPassInput" type="password" placeholder="Password" style="border-radius:999px;height:44px;" oninput="checkWide2EmailReady()" />
-              <button class="pw-toggle-btn pw-toggle-icon" onclick="toggleWidePw('wide2EmailPassInput',this)"><img src="Assets/Icons/Eye_Close.svg" width="20" height="20" style="opacity:0.48;" alt="toggle" /></button>
+          <div id="f2EmailView" style="display:none;flex-direction:column;height:100%;overflow:hidden;">
+            <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0;">
+              <input type="text" placeholder="Email or username" id="wide2EmailInput" oninput="checkWide2EmailReady()" style="width:100%;height:44px;flex-shrink:0;background:rgba(0,0,0,0.05);border:none;border-radius:999px;padding:0 16px;font-size:14px;font-family:inherit;color:rgba(0,0,0,0.34);outline:none;caret-color:#FE2C55;" />
+          
+              <div class="pw-input-wrap" style="flex-shrink:0;">
+                <input class="pw-input" id="wide2EmailPassInput" type="password" placeholder="Password" style="border-radius:999px;height:44px;" oninput="checkWide2EmailReady()" />
+                <button class="pw-toggle-btn pw-toggle-icon" onclick="toggleWidePw('wide2EmailPassInput',this)"><img src="Assets/Icons/Eye_Close.svg" width="20" height="20" style="opacity:0.48;" alt="toggle" /></button>
+              </div>
+          
+              <div style="display:flex;justify-content:flex-end;align-items:center;padding:0 8px;flex-shrink:0;height:18px;">
+                <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:12px;line-height:1;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Forgot password?</button>
+              </div>
             </div>
-            <div style="padding:0 8px;text-align:right;flex-shrink:0;">
-              <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:12px;color:rgba(0,0,0,0.65);cursor:pointer;padding:0;">Forgot password?</button>
-            </div>
-            <button id="wide2EmailLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;">Log in</button>
-            <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;">
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Google.svg" width="22" height="22" alt="" /></button>
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Facebook.svg" width="22" height="22" alt="" /></button>
-              <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Apple.svg" width="22" height="22" alt="" /></button>
+          
+            <div style="margin-top:auto;display:flex;flex-direction:column;gap:20px;flex-shrink:0;">
+              <button id="wide2EmailLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;">Log in</button>
+              <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-shrink:0;">
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Google.svg" width="22" height="22" alt="" /></button>
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Facebook.svg" width="22" height="22" alt="" /></button>
+                <button style="width:44px;height:44px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;"><img src="Assets/Icons/Apple.svg" width="22" height="22" alt="" /></button>
+              </div>
             </div>
           </div>
 
