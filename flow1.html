@@ -6,214 +6,105 @@
 <title>TikTok — Flow 1</title>
 <link rel="stylesheet" href="shared.css" />
 <style>
-  /* ── Flow 1 specific ── */
-  #ttOverlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.50); z-index: 1000; cursor: pointer;
-  }
-  #ttOverlay.open { display: block; }
-  
-  #loginPanel {
-    display: none; position: fixed; inset: 0; z-index: 1001;
-    align-items: center; justify-content: center; pointer-events: none;
-  }
-  #loginPanel.open { display: flex; }
-  
-  .login-panel {
-    background: white;
-    border-radius: 16px;
-    width: 420px;
-    height: 557px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    pointer-events: all;
-    font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-  
-  .panel-screen {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    height: 100%;
-  }
-  
-  .panel-screen.hidden { display: none; }
-  
-  /* ── NAV BUTTONS ── */
-  .login-panel-close,
-  .panel-nav-back,
-  .panel-nav-close {
-    position: absolute;
-    top: 16px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: rgba(0,0,0,0.05);
-    cursor: pointer;
-    border-radius: 999px;
-    z-index: 5;
-  }
-  .login-panel-close { right: 16px; }
-  .panel-nav-back { left: 16px; }
-  .panel-nav-close { right: 16px; }
-  
-  .login-panel-close:hover,
-  .panel-nav-back:hover,
-  .panel-nav-close:hover {
-    background: rgba(0,0,0,0.10);
-  }
-  
-  /* ── UNIFIED CENTER SYSTEM ── */
-  .login-panel-header,
-  .qr-title {
-    padding: 56px 64px 24px;
-    text-align: center;
-  }
-  
-  .login-panel-title,
-  .qr-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #000;
-    line-height: 1.2;
-  }
-  
-  /* MAIN BUTTON STACK */
-  .login-panel-buttons {
-    padding: 0 64px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  /* QR BODY */
-  .qr-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 0 64px;
-  }
-  
-  /* QR CARD */
-  .qr-card {
-    width: 240px;
-    height: 240px;
-    border-radius: 60px;
-    border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.06);
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  
-  .qr-card img {
-    width: 200px;
-    height: 200px;
-    object-fit: contain;
-  }
-  
-  /* QR TEXT */
-  .qr-instructions {
-    font-size: 11px;
-    color: rgba(0,0,0,0.65);
-    text-align: center;
-    line-height: 1.5;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  
-    /* FIX CENTER BALANCE */
-    width: 100%;
-    max-width: 260px;
-  }
-  
-  /* FOOTERS */
-  .login-panel-signup,
-  .qr-signup {
-    position: absolute;
-    bottom: 24px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 14px;
-    color: #000;
-  }
-  
-  .login-panel-signup span,
-  .qr-signup span {
-    color: #FE2C55;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  
-  /* BACK LINK */
-  .flow-back-link {
-    position: fixed;
-    top: 20px;
-    left: 24px;
-    z-index: 99997;
-    font-family: 'TikTokSans', -apple-system, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(0,0,0,0.48);
-    text-decoration: none;
-    background: white;
-    border-radius: 999px;
-    padding: 6px 14px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.10);
-    transition: color 0.15s;
-  }
-  .flow-back-link:hover { color: #FE2C55; }
-  
-  /* ── COUNTRY DROPDOWN ── */
-  #f1CountryDropdown {
-    position: absolute;
-    z-index: 100;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0px 0px 24px rgba(0,0,0,0.10);
-    padding: 12px;
-    width: 204px;
-    display: none;
-    flex-direction: column;
-    gap: 2px;
-    max-height: 240px;
-    overflow-y: auto;
-  }
-  #f1CountryDropdown::-webkit-scrollbar { width: 0; }
-  
-  .f1-dd-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 40px;
-    padding: 6px 8px;
-    border-radius: 10px;
-    cursor: pointer;
-    flex-shrink: 0;
-    font-family: 'TikTokSans', -apple-system, sans-serif;
-    font-size: 14px;
-    line-height: 22px;
-    white-space: nowrap;
-    transition: background 0.1s;
-  }
-  
-  .f1-dd-row:hover { background: rgba(0,0,0,0.05); }
-  .f1-dd-row.selected { background: transparent; }
-  .f1-dd-row.selected .f1-dd-name { color: #FE2C55; font-weight: 600; }
-  .f1-dd-row.selected .f1-dd-code { color: #FE2C55; }
-  
-  .f1-dd-name { color: #000; }
-  .f1-dd-code { color: rgba(0,0,0,0.48); }
-  </style>
+/* ── Flow 1 specific ── */
+#ttOverlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.50); z-index: 1000; cursor: pointer;
+}
+#ttOverlay.open { display: block; }
+
+#loginPanel {
+  display: none; position: fixed; inset: 0; z-index: 1001;
+  align-items: center; justify-content: center; pointer-events: none;
+}
+#loginPanel.open { display: flex; }
+
+.login-panel {
+  background: white; border-radius: 16px; width: 420px; height: 557px;
+  overflow: hidden; position: relative; display: flex; flex-direction: column;
+  pointer-events: all;
+  font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.panel-screen { display: flex; flex-direction: column; position: relative; height: 100%; }
+.panel-screen.hidden { display: none; }
+
+.login-panel-close {
+  position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: rgba(0,0,0,0.05); cursor: pointer; border-radius: 999px; z-index: 5;
+}
+.login-panel-close:hover { background: rgba(0,0,0,0.10); }
+.login-panel-close img,
+.panel-nav-close img,
+.panel-nav-back img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.panel-nav-back, .panel-nav-close {
+  position: absolute; top: 16px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: rgba(0,0,0,0.05); cursor: pointer; border-radius: 999px; z-index: 5;
+}
+.panel-nav-back { left: 16px; }
+.panel-nav-close { right: 16px; }
+.panel-nav-back:hover, .panel-nav-close:hover { background: rgba(0,0,0,0.10); }
+
+.login-panel-header { padding: 56px 32px 24px; text-align: center; }
+.login-panel-title { font-size: 28px; font-weight: 700; color: #000; line-height: 1.2; }
+.login-panel-buttons { padding: 0 52px; display: flex; flex-direction: column; gap: 12px; }
+
+.login-panel-signup {
+  position: absolute; bottom: 24px; left: 0; right: 0;
+  text-align: center; font-size: 14px; color: #000;
+}
+.login-panel-signup span { color: #FE2C55; cursor: pointer; font-weight: 600; }
+
+.qr-title { padding: 56px 32px 24px; text-align: center; font-size: 28px; font-weight: 700; color: #000; line-height: 1.2; }
+.qr-body { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 0 32px; }
+.qr-card {
+  width: 240px; height: 240px; border-radius: 60px;
+  border: 1px solid rgba(0,0,0,0.05); box-shadow: 0px 2px 8px rgba(0,0,0,0.06);
+  background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.qr-card img { width: 200px; height: 200px; object-fit: contain; }
+.qr-instructions { font-size: 11px; color: rgba(0,0,0,0.65); text-align: center; width: 282px; line-height: 1.5; display: flex; flex-direction: column; gap: 4px; }
+.qr-signup { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 14px; color: #000; }
+.qr-signup span { color: #FE2C55; cursor: pointer; font-weight: 600; }
+
+/* Back link at bottom of flow pages */
+.flow-back-link {
+  position: fixed; top: 20px; left: 24px; z-index: 99997;
+  font-family: 'TikTokSans', -apple-system, sans-serif;
+  font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.48);
+  text-decoration: none; background: white; border-radius: 999px;
+  padding: 6px 14px; box-shadow: 0px 2px 10px rgba(0,0,0,0.10);
+  transition: color 0.15s;
+}
+.flow-back-link:hover { color: #FE2C55; }
+
+/* ── Country dropdown ── */
+#f1CountryDropdown {
+  position: absolute; z-index: 100; background: white;
+  border-radius: 20px; box-shadow: 0px 0px 24px rgba(0,0,0,0.10);
+  padding: 12px; width: 204px; display: none; flex-direction: column;
+  gap: 2px; max-height: 240px; overflow-y: auto;
+}
+#f1CountryDropdown::-webkit-scrollbar { width: 0; }
+.f1-dd-row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 40px; padding: 6px 8px; border-radius: 10px; cursor: pointer;
+  flex-shrink: 0; font-family: 'TikTokSans', -apple-system, sans-serif;
+  font-size: 14px; line-height: 22px; white-space: nowrap; transition: background 0.1s;
+}
+.f1-dd-row:hover { background: rgba(0,0,0,0.05); }
+.f1-dd-row.selected { background: transparent; }
+.f1-dd-row.selected .f1-dd-name { color: #FE2C55; font-weight: 600; }
+.f1-dd-row.selected .f1-dd-code { color: #FE2C55; }
+.f1-dd-name { color: #000; }
+.f1-dd-code { color: rgba(0,0,0,0.48); }
+</style>
 </head>
 <body>
 
