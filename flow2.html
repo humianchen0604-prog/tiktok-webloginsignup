@@ -41,12 +41,12 @@
 .f2-dd-name { color: #000; }
 .f2-dd-code { color: rgba(0,0,0,0.48); }
 
-/* ── QR toggle in peephole ── */
+/* ── Flow selector + QR toggle in peephole ── */
 #peepholeQRToggle {
   position: fixed; bottom: 84px; right: 24px; z-index: 99998;
-  background: white; border-radius: 12px;
+  background: white; border-radius: 16px;
   box-shadow: 0px 4px 24px rgba(0,0,0,0.15);
-  padding: 12px; width: 200px; display: none;
+  padding: 16px; width: 260px; display: none;
   font-family: 'TikTokSans', -apple-system, sans-serif;
 }
 </style>
@@ -104,12 +104,23 @@
   </div>
 </div>
 
-<!-- PEEPHOLE: QR position toggle -->
-<div id="peepholeBtn" onclick="toggleQRToggle()">
-  <img src="Assets/Icons/Eye_Open.svg" id="peepholeIcon" width="24" height="24" alt="QR position" />
+<!-- PEEPHOLE: Flow selector + QR position -->
+<div id="peepholeBtn" onclick="toggleFlowSelector()">
+  <img src="Assets/Icons/Eye_Open.svg" id="peepholeIcon" width="24" height="24" alt="Choose flow" />
 </div>
 
 <div id="peepholeQRToggle">
+  <div style="font-size:11px;font-weight:600;color:rgba(0,0,0,0.48);margin-bottom:8px;">Choose Login Flow</div>
+  <a href="flow1.html" style="text-decoration:none;display:block;margin-bottom:6px;">
+    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-size:12px;font-weight:600;color:#202020;cursor:pointer;">Flow 1 — Current (Mock Online)</div>
+  </a>
+  <a href="flow2.html" style="text-decoration:none;display:block;margin-bottom:6px;">
+    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);font-size:12px;font-weight:600;color:#FE2C55;cursor:pointer;">✦ Flow 2 — QR + 1P (Phone/Email focus)</div>
+  </a>
+  <a href="flow3.html" style="text-decoration:none;display:block;margin-bottom:12px;">
+    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-size:12px;font-weight:600;color:#202020;cursor:pointer;">Flow 3 — QR + 3P (All buttons)</div>
+  </a>
+  <div style="height:1px;background:rgba(0,0,0,0.08);margin-bottom:10px;"></div>
   <div style="font-size:11px;font-weight:600;color:rgba(0,0,0,0.48);margin-bottom:8px;">QR position:</div>
   <div style="display:flex;gap:6px;">
     <button onclick="setQRSide('left')" id="qrLeft" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);font-family:inherit;font-size:12px;font-weight:600;color:#FE2C55;cursor:pointer;">← Left</button>
@@ -324,12 +335,12 @@
 <script src="shared.js"></script>
 <script>
   var qrSide = 'left';
-  var qrToggleOpen = false;
+  var flowSelectorOpen = false;
 
-  function toggleQRToggle() {
-    qrToggleOpen = !qrToggleOpen;
-    document.getElementById('peepholeQRToggle').style.display = qrToggleOpen ? 'block' : 'none';
-    document.getElementById('peepholeIcon').src = qrToggleOpen ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
+  function toggleFlowSelector() {
+    flowSelectorOpen = !flowSelectorOpen;
+    document.getElementById('peepholeQRToggle').style.display = flowSelectorOpen ? 'block' : 'none';
+    document.getElementById('peepholeIcon').src = flowSelectorOpen ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
   }
 
   function setQRSide(side) {
@@ -436,15 +447,13 @@
   document.addEventListener('click', function(e) {
     var toggle = document.getElementById('peepholeQRToggle');
     var btn = document.getElementById('peepholeBtn');
-    if (qrToggleOpen && !toggle.contains(e.target) && !btn.contains(e.target)) {
+    if (flowSelectorOpen && !toggle.contains(e.target) && !btn.contains(e.target)) {
       toggle.style.display = 'none';
       document.getElementById('peepholeIcon').src = 'Assets/Icons/Eye_Open.svg';
-      qrToggleOpen = false;
+      flowSelectorOpen = false;
     }
   });
 
-  // Auto-open on load
-  window.addEventListener('load', openWidePanel);
 
   /* ── Flow 2 QR expiry ── */
   var f2QRTimer = null;
