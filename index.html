@@ -5,6 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>TikTok — Login Prototype</title>
 <link rel="stylesheet" href="shared.css" />
+<style>
+/* ── Flow 1 panel (embedded in index) ── */
+#ttOverlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.50); z-index: 1000; cursor: pointer;
+}
+#ttOverlay.open { display: block; }
+
+#loginPanel {
+  display: none; position: fixed; inset: 0; z-index: 1001;
+  align-items: center; justify-content: center; pointer-events: none;
+}
+#loginPanel.open { display: flex; }
+
+.login-panel {
+  background: white; border-radius: 16px; width: 420px; height: 557px;
+  overflow: hidden; position: relative; display: flex; flex-direction: column;
+  pointer-events: all;
+  font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.panel-screen { display: flex; flex-direction: column; position: relative; height: 100%; }
+.panel-screen.hidden { display: none; }
+
+.login-panel-close {
+  position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: rgba(0,0,0,0.05); cursor: pointer; border-radius: 999px; z-index: 5;
+}
+.login-panel-close:hover { background: rgba(0,0,0,0.10); }
+.login-panel-close img,
+.panel-nav-close img,
+.panel-nav-back img {
+  width: 20px; height: 20px; display: block;
+}
+
+.panel-nav-back, .panel-nav-close {
+  position: absolute; top: 16px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: rgba(0,0,0,0.05); cursor: pointer; border-radius: 999px; z-index: 5;
+}
+.panel-nav-back { left: 16px; }
+.panel-nav-close { right: 16px; }
+.panel-nav-back:hover, .panel-nav-close:hover { background: rgba(0,0,0,0.10); }
+
+.login-panel-header { padding: 56px 32px 24px; text-align: center; }
+.login-panel-title { font-size: 28px; font-weight: 700; color: #000; line-height: 1.2; }
+.login-panel-buttons { padding: 0 52px; display: flex; flex-direction: column; gap: 12px; }
+
+.login-panel-signup {
+  position: absolute; bottom: 24px; left: 0; right: 0;
+  text-align: center; font-size: 14px; color: #000;
+}
+.login-panel-signup span { color: #FE2C55; cursor: pointer; font-weight: 600; }
+
+.qr-title { padding: 56px 32px 24px; text-align: center; font-size: 28px; font-weight: 700; color: #000; line-height: 1.2; }
+.qr-body { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 0 32px; }
+.qr-card {
+  width: 240px; height: 240px; border-radius: 60px;
+  border: 1px solid rgba(0,0,0,0.05); box-shadow: 0px 2px 8px rgba(0,0,0,0.06);
+  background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.qr-card img { width: 200px; height: 200px; object-fit: contain; }
+.qr-instructions { font-size: 11px; color: rgba(0,0,0,0.65); text-align: center; width: 282px; line-height: 1.5; display: flex; flex-direction: column; gap: 4px; }
+.qr-signup { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 14px; color: #000; }
+.qr-signup span { color: #FE2C55; cursor: pointer; font-weight: 600; }
+
+/* ── Country dropdown ── */
+#f1CountryDropdown {
+  position: absolute; z-index: 100; background: white;
+  border-radius: 20px; box-shadow: 0px 0px 24px rgba(0,0,0,0.10);
+  padding: 12px; width: 204px; display: none; flex-direction: column;
+  gap: 2px; max-height: 240px; overflow-y: auto;
+}
+#f1CountryDropdown::-webkit-scrollbar { width: 0; }
+.f1-dd-row {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 40px; padding: 6px 8px; border-radius: 10px; cursor: pointer;
+  flex-shrink: 0; font-family: 'TikTokSans', -apple-system, sans-serif;
+  font-size: 14px; line-height: 22px; white-space: nowrap; transition: background 0.1s;
+}
+.f1-dd-row:hover { background: rgba(0,0,0,0.05); }
+.f1-dd-row.selected { background: transparent; }
+.f1-dd-row.selected .f1-dd-name { color: #FE2C55; font-weight: 600; }
+.f1-dd-row.selected .f1-dd-code { color: #FE2C55; }
+.f1-dd-name { color: #000; }
+.f1-dd-code { color: rgba(0,0,0,0.48); }
+</style>
 </head>
 <body>
 
@@ -33,7 +120,7 @@
           <div class="tt-nav-item"><div class="tt-nav-icon"><img src="Assets/Icons/Live_Wave.svg" width="24" height="24" alt="" /></div>LIVE</div>
           <div class="tt-nav-item"><div class="tt-nav-icon"><img src="Assets/Icons/Ellipsis_Horizontal.svg" width="24" height="24" alt="" /></div>More</div>
         </div>
-        <button class="tt-left-nav-btn" onclick="window.location.href='flow1.html'">Log in</button>
+        <button class="tt-left-nav-btn" onclick="openPanel()">Log in</button>
         <div class="tt-divider"></div>
         <div class="tt-footer">
           <div class="tt-footer-links"><span>Company</span><span>Programs</span><span>Terms &amp; Policies</span></div>
@@ -55,8 +142,180 @@
           <button class="toolbar-pill-btn"><img src="Assets/Icons/SMS.svg" alt="" />Get App</button>
           <button class="toolbar-pill-btn"><img src="Assets/Icons/Arrow_Down_To_Line.svg" alt="" />PC App</button>
         </div>
-        <button class="toolbar-login-btn" onclick="window.location.href='flow1.html'">Login</button>
+        <button class="toolbar-login-btn" onclick="openPanel()">Login</button>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div id="ttOverlay"></div>
+
+<!-- FLOW 1 LOGIN PANEL -->
+<div id="loginPanel">
+  <div class="login-panel">
+
+    <div id="f1CountryDropdown"></div>
+
+    <!-- screenMain -->
+    <div class="panel-screen" id="screenMain">
+      <button class="login-panel-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" /></button>
+      <div class="login-panel-header"><div class="login-panel-title">Log in to TikTok</div></div>
+      <div class="login-panel-buttons">
+        <button class="login-panel-option-btn" onclick="goScreen('screenQR')">
+          <div class="login-panel-option-icon"><img src="Assets/Icons/QR_Code.svg" alt="" /></div>Use QR code
+        </button>
+        <button class="login-panel-option-btn" onclick="goScreen('screenPhone')">
+          <div class="login-panel-option-icon"><img src="Assets/Icons/Person_Fill.svg" alt="" /></div>Use phone or email
+        </button>
+        <button class="login-panel-option-btn">
+          <div class="login-panel-option-icon"><img src="Assets/Icons/Google.svg" alt="" /></div>Continue with Google
+        </button>
+        <button class="login-panel-option-btn">
+          <div class="login-panel-option-icon"><img src="Assets/Icons/Facebook.svg" alt="" /></div>Continue with Facebook
+        </button>
+        <button class="login-panel-option-btn">
+          <div class="login-panel-option-icon"><img src="Assets/Icons/Apple.svg" alt="" /></div>Continue with Apple
+        </button>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="login-panel-signup">Don't have an account? <span onclick="goScreen('screenSignUp')">Sign up</span></div>
+    </div>
+
+    <!-- screenQR -->
+    <div class="panel-screen hidden" id="screenQR">
+      <button class="panel-nav-back" onclick="goScreen('screenMain')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="panel-nav-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" width="20" height="20" /></button>
+      <div class="qr-title">Log in with QR code</div>
+      <div class="qr-body">
+        <div class="qr-card" id="f1QRCard" style="position:relative;cursor:default;" onclick="f1QRRefresh()">
+          <img id="f1QRImage" src="Assets/Images/QR_Code.png" alt="QR Code"
+            style="width:200px;height:200px;object-fit:contain;transition:opacity 0.3s;" />
+          <div id="f1QRExpired" style="display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:60px;">
+            <div style="width:40px;height:40px;flex-shrink:0;background:rgba(0,0,0,0.48);border-radius:999px;display:flex;align-items:center;justify-content:center;">
+              <img src="Assets/Icons/Arrow_Counter_Clockwise_Fill.svg" style="display:block;width:20px;height:20px;flex-shrink:0;filter:brightness(0) invert(1);" alt="Refresh" />
+            </div>
+            <div style="font-size:16px;font-weight:700;color:#000;text-align:center;line-height:1.3;font-family:'TikTokSans',-apple-system,sans-serif;">QR code expired.<br>Click to refresh</div>
+          </div>
+        </div>
+        <div class="qr-instructions"><p>1. Scan with your mobile device's camera</p><p>2. Confirm login on your mobile device</p></div>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="qr-signup">Don't have an account? <span onclick="goScreen('screenSignUp')">Sign up</span></div>
+    </div>
+
+    <!-- screenPhone -->
+    <div class="panel-screen hidden" id="screenPhone">
+      <button class="panel-nav-back" onclick="goScreen('screenMain')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="panel-nav-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" width="20" height="20" /></button>
+      <div class="screen-title">Log in</div>
+      <div style="padding:0 64px;display:flex;flex-direction:column;gap:24px;">
+        <div class="seg-control">
+          <button class="seg-btn active" onclick="switchPhoneTab('phone')">Phone</button>
+          <button class="seg-btn" onclick="switchPhoneTab('email')">Username/Email</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="phone-row">
+            <div class="phone-country" id="f1CountryBtnPhone" onclick="f1ToggleDropdown(event,'f1CountryBtnPhone')" style="cursor:pointer;"><span id="f1CountryDisplayPhone">US +1</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px;"><path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <input class="phone-num-input" id="phoneInput" type="tel" maxlength="10" placeholder="Phone Number" oninput="checkPhoneReady()" />
+          </div>
+          <button class="use-pw-link" onclick="goScreen('screenPhonePass')">Use password</button>
+        </div>
+        <button class="continue-btn" id="phoneContinueBtn" onclick="goScreen('screenPhoneCode')">Continue</button>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="login-panel-signup">Don't have an account? <span onclick="goScreen('screenSignUp')">Sign up</span></div>
+    </div>
+
+    <!-- screenPhoneCode -->
+    <div class="panel-screen hidden" id="screenPhoneCode">
+      <button class="panel-nav-back" onclick="goScreen('screenPhone')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="panel-nav-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" width="20" height="20" /></button>
+      <div class="screen-title">Enter 6-digit code</div>
+      <div style="padding:0 64px;display:flex;flex-direction:column;gap:12px;">
+        <p style="font-size:13px;color:rgba(0,0,0,0.48);line-height:1.3;">Your code was sent to +1 *******777</p>
+        <div class="pin-row">
+          <input class="pin-box" type="tel" maxlength="1" /><input class="pin-box" type="tel" maxlength="1" /><input class="pin-box" type="tel" maxlength="1" /><input class="pin-box" type="tel" maxlength="1" /><input class="pin-box" type="tel" maxlength="1" /><input class="pin-box" type="tel" maxlength="1" />
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;justify-content:center;margin-top:36px;">
+          <button id="resendBtn" style="background:none;border:none;font-family:inherit;font-size:16px;font-weight:600;color:#FE2C55;opacity:0.4;cursor:default;padding:0;">Resend code</button>
+          <span id="resendTimer" style="font-size:15px;color:rgba(0,0,0,0.34);">10s</span>
+        </div>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="login-panel-signup">Don't have an account? <span onclick="goScreen('screenSignUp')">Sign up</span></div>
+    </div>
+
+    <!-- screenPhonePass -->
+    <div class="panel-screen hidden" id="screenPhonePass">
+      <button class="panel-nav-back" onclick="goScreen('screenPhone')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="panel-nav-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" width="20" height="20" /></button>
+      <div class="screen-title">Log in</div>
+      <div style="padding:0 64px;display:flex;flex-direction:column;gap:24px;">
+        <div class="seg-control">
+          <button class="seg-btn active">Phone</button>
+          <button class="seg-btn" onclick="goScreen('screenEmail')">Username/Email</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="phone-row">
+            <div class="phone-country" id="f1CountryBtnPass" onclick="f1ToggleDropdown(event,'f1CountryBtnPass')" style="cursor:pointer;"><span id="f1CountryDisplayPass">US +1</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-left:4px;"><path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <input class="phone-num-input" type="tel" maxlength="10" placeholder="Phone Number" oninput="checkPhonePassReady()" id="phonePassInput" />
+          </div>
+          <div class="pw-input-wrap">
+            <input class="pw-input" id="phonePassPw" type="password" placeholder="Password" oninput="checkPhonePassReady()" />
+            <button class="pw-toggle-btn pw-toggle-icon" onclick="togglePhonePassPw(this)"><img src="Assets/Icons/Eye_Close.svg" id="phonePassPwIcon" width="30" height="30" alt="Show" /></button>
+          </div>
+          <button class="use-pw-link" onclick="goScreen('screenPhone')">Use code</button>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+          <button class="continue-btn" id="phonePassContinueBtn">Continue</button>
+          <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:14px;font-weight:600;color:rgba(0,0,0,0.48);cursor:pointer;">Forget password?</button>
+        </div>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="login-panel-signup">Don't have an account? <span onclick="goScreen('screenSignUp')">Sign up</span></div>
+    </div>
+
+    <!-- screenEmail -->
+    <div class="panel-screen hidden" id="screenEmail">
+      <button class="panel-nav-back" onclick="goScreen('screenMain')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="panel-nav-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" width="20" height="20" /></button>
+      <div class="screen-title">Log in</div>
+      <div style="padding:0 64px;display:flex;flex-direction:column;gap:24px;">
+        <div class="seg-control">
+          <button class="seg-btn" onclick="goScreen('screenPhone')">Phone</button>
+          <button class="seg-btn active">Username/Email</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <input class="form-input" type="text" placeholder="Username/Email" oninput="checkEmailReady()" id="emailUsernameInput" />
+          <div class="pw-input-wrap">
+            <input class="pw-input" id="emailPwInput" type="password" placeholder="Password" oninput="checkEmailReady()" />
+            <button class="pw-toggle-btn pw-toggle-icon" onclick="toggleEmailPw(this)"><img src="Assets/Icons/Eye_Close.svg" id="emailPwIcon" width="30" height="30" alt="Show" /></button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+          <button class="continue-btn" id="emailContinueBtn">Continue</button>
+          <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:14px;font-weight:600;color:rgba(0,0,0,0.48);cursor:pointer;">Forget password?</button>
+        </div>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="login-panel-signup">Don't have an account? <span onclick="goScreen('screenSignUp')">Sign up</span></div>
+    </div>
+
+    <!-- screenSignUp -->
+    <div class="panel-screen hidden" id="screenSignUp">
+      <button class="panel-nav-back" onclick="goScreen('screenMain')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#202020" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="panel-nav-close" onclick="closePanel()"><img src="Assets/Icons/X_Mark.svg" alt="Close" width="20" height="20" /></button>
+      <div class="screen-title">Sign up for TikTok</div>
+      <div style="padding:0 64px;display:flex;flex-direction:column;gap:12px;">
+        <button class="login-panel-option-btn"><div class="login-panel-option-icon"><img src="Assets/Icons/Person_Fill.svg" alt="" /></div>Use phone or email</button>
+        <button class="login-panel-option-btn"><div class="login-panel-option-icon"><img src="Assets/Icons/Google.svg" alt="" /></div>Continue with Google</button>
+        <button class="login-panel-option-btn"><div class="login-panel-option-icon"><img src="Assets/Icons/Facebook.svg" alt="" /></div>Continue with Facebook</button>
+        <button class="login-panel-option-btn"><div class="login-panel-option-icon"><img src="Assets/Icons/Apple.svg" alt="" /></div>Continue with AppleID</button>
+      </div>
+      <div class="screen-terms-block">By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.</div>
+      <div class="login-panel-signup">Already have an account? <span onclick="goScreen('screenMain')">Log in</span></div>
     </div>
 
   </div>
@@ -80,13 +339,13 @@
     Choose Login Flow
   </div>
 
-  <a href="flow1.html" style="text-decoration:none;display:block;margin-bottom:8px;">
+  <div onclick="closeFlowSelectorAndOpen()" style="text-decoration:none;display:block;margin-bottom:8px;cursor:pointer;">
     <div style="padding:10px 14px;border-radius:10px;
       border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);
-      font-size:14px;font-weight:600;color:#FE2C55;cursor:pointer;">
+      font-size:14px;font-weight:600;color:#FE2C55;">
       ✦ Flow 1 — Current (Mock Online)
     </div>
-  </a>
+  </div>
 
   <a href="flow2.html" style="text-decoration:none;display:block;margin-bottom:8px;">
     <div style="padding:10px 14px;border-radius:10px;
@@ -107,22 +366,290 @@
 
 <script src="shared.js"></script>
 <script>
-  var flowSelectorOpen = false;
+  /* ── Panel open/close ── */
+  function openPanel() {
+    goScreen('screenMain');
+    document.getElementById('ttOverlay').classList.add('open');
+    document.getElementById('loginPanel').classList.add('open');
+  }
+  function closePanel() {
+    f1QRClear();
+    f1QRReset();
+    document.getElementById('ttOverlay').classList.remove('open');
+    document.getElementById('loginPanel').classList.remove('open');
+  }
+  function goScreen(id) {
+    if (id !== 'screenQR') f1QRClear();
+    document.querySelectorAll('.panel-screen').forEach(function(s) {
+      s.classList.add('hidden');
+    });
+    document.getElementById(id).classList.remove('hidden');
+    if (id === 'screenPhoneCode') { initPinBoxes(); startResendCountdown(); }
+    if (id === 'screenQR') f1QRStart();
+  }
+  function switchPhoneTab(tab) { if (tab === 'email') goScreen('screenEmail'); }
 
+  function checkPhoneReady() {
+    var val = document.getElementById('phoneInput').value.replace(/\D/g,'');
+    document.getElementById('phoneContinueBtn').classList.toggle('ready', val.length >= 10);
+  }
+  function checkPhonePassReady() {
+    var phone = document.getElementById('phonePassInput').value.replace(/\D/g,'');
+    var pw = document.getElementById('phonePassPw').value;
+    document.getElementById('phonePassContinueBtn').classList.toggle('ready', phone.length >= 10 && pw.length >= 1);
+  }
+  function checkEmailReady() {
+    var user = document.getElementById('emailUsernameInput').value;
+    var pw = document.getElementById('emailPwInput').value;
+    document.getElementById('emailContinueBtn').classList.toggle('ready', user.length >= 1 && pw.length >= 1);
+  }
+  function initPinBoxes() {
+    var boxes = document.querySelectorAll('#screenPhoneCode .pin-box');
+    boxes.forEach(function(box, i) {
+      box.value = '';
+      box.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g,'').slice(0,1);
+        if (this.value && i < boxes.length - 1) boxes[i+1].focus();
+      });
+      box.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && i > 0) boxes[i-1].focus();
+      });
+    });
+  }
+  function startResendCountdown() {
+    var t = 10;
+    var btn = document.getElementById('resendBtn');
+    var timer = document.getElementById('resendTimer');
+    btn.style.opacity = '0.4'; btn.style.cursor = 'default'; timer.textContent = t + 's';
+    var interval = setInterval(function() {
+      t--;
+      if (t <= 0) { clearInterval(interval); timer.textContent = ''; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; }
+      else { timer.textContent = t + 's'; }
+    }, 1000);
+  }
+  function togglePhonePassPw(btn) {
+    var inp = document.getElementById('phonePassPw');
+    var icon = document.getElementById('phonePassPwIcon');
+    if (inp.type === 'password') { inp.type = 'text'; icon.src = 'Assets/Icons/Eye_Open.svg'; }
+    else { inp.type = 'password'; icon.src = 'Assets/Icons/Eye_Close.svg'; }
+  }
+  function toggleEmailPw(btn) {
+    var inp = document.getElementById('emailPwInput');
+    var icon = document.getElementById('emailPwIcon');
+    if (inp.type === 'password') { inp.type = 'text'; icon.src = 'Assets/Icons/Eye_Open.svg'; }
+    else { inp.type = 'password'; icon.src = 'Assets/Icons/Eye_Close.svg'; }
+  }
+  document.getElementById('ttOverlay').addEventListener('click', closePanel);
+
+  /* ── QR expiry ── */
+  var f1QRTimer = null;
+  function f1QRStart() {
+    f1QRReset();
+    f1QRTimer = setTimeout(function() {
+      var img = document.getElementById('f1QRImage');
+      var exp = document.getElementById('f1QRExpired');
+      var card = document.getElementById('f1QRCard');
+      if (img) img.style.opacity = '0.06';
+      if (exp) exp.style.display = 'flex';
+      if (card) card.style.cursor = 'pointer';
+    }, 10000);
+  }
+  function f1QRClear() {
+    if (f1QRTimer) { clearTimeout(f1QRTimer); f1QRTimer = null; }
+  }
+  function f1QRReset() {
+    var img = document.getElementById('f1QRImage');
+    var exp = document.getElementById('f1QRExpired');
+    var card = document.getElementById('f1QRCard');
+    if (img) img.style.opacity = '1';
+    if (exp) exp.style.display = 'none';
+    if (card) card.style.cursor = 'default';
+  }
+  function f1QRRefresh() {
+    var exp = document.getElementById('f1QRExpired');
+    if (!exp || exp.style.display === 'none') return;
+    f1QRClear();
+    f1QRReset();
+    f1QRStart();
+  }
+
+  /* ── Country dropdown ── */
+  var f1SelCountry = { name: 'United States', code: '+1' };
+  var f1DropdownOpen = false;
+
+  var F1_COUNTRIES = [
+    { name:'Afghanistan',           code:'+93'  },
+    { name:'Albania',               code:'+355' },
+    { name:'Algeria',               code:'+213' },
+    { name:'Argentina',             code:'+54'  },
+    { name:'Armenia',               code:'+374' },
+    { name:'Australia',             code:'+61'  },
+    { name:'Austria',               code:'+43'  },
+    { name:'Bahrain',               code:'+973' },
+    { name:'Bangladesh',            code:'+880' },
+    { name:'Belgium',               code:'+32'  },
+    { name:'Brazil',                code:'+55'  },
+    { name:'Bulgaria',              code:'+359' },
+    { name:'Cambodia',              code:'+855' },
+    { name:'Canada',                code:'+1'   },
+    { name:'Chile',                 code:'+56'  },
+    { name:'China',                 code:'+86'  },
+    { name:'Colombia',              code:'+57'  },
+    { name:'Croatia',               code:'+385' },
+    { name:'Czech Republic',        code:'+420' },
+    { name:'Denmark',               code:'+45'  },
+    { name:'Egypt',                 code:'+20'  },
+    { name:'Ethiopia',              code:'+251' },
+    { name:'Finland',               code:'+358' },
+    { name:'France',                code:'+33'  },
+    { name:'Ghana',                 code:'+233' },
+    { name:'Greece',                code:'+30'  },
+    { name:'Hong Kong',             code:'+852' },
+    { name:'Hungary',               code:'+36'  },
+    { name:'India',                 code:'+91'  },
+    { name:'Indonesia',             code:'+62'  },
+    { name:'Iran',                  code:'+98'  },
+    { name:'Iraq',                  code:'+964' },
+    { name:'Ireland',               code:'+353' },
+    { name:'Israel',                code:'+972' },
+    { name:'Italy',                 code:'+39'  },
+    { name:'Japan',                 code:'+81'  },
+    { name:'Jordan',                code:'+962' },
+    { name:'Kazakhstan',            code:'+7'   },
+    { name:'Kenya',                 code:'+254' },
+    { name:'South Korea',           code:'+82'  },
+    { name:'Kuwait',                code:'+965' },
+    { name:'Laos',                  code:'+856' },
+    { name:'Lebanon',               code:'+961' },
+    { name:'Malaysia',              code:'+60'  },
+    { name:'Mexico',                code:'+52'  },
+    { name:'Morocco',               code:'+212' },
+    { name:'Myanmar',               code:'+95'  },
+    { name:'Nepal',                 code:'+977' },
+    { name:'Netherlands',           code:'+31'  },
+    { name:'New Zealand',           code:'+64'  },
+    { name:'Nigeria',               code:'+234' },
+    { name:'Norway',                code:'+47'  },
+    { name:'Oman',                  code:'+968' },
+    { name:'Pakistan',              code:'+92'  },
+    { name:'Philippines',           code:'+63'  },
+    { name:'Poland',                code:'+48'  },
+    { name:'Portugal',              code:'+351' },
+    { name:'Qatar',                 code:'+974' },
+    { name:'Romania',               code:'+40'  },
+    { name:'Russia',                code:'+7'   },
+    { name:'Saudi Arabia',          code:'+966' },
+    { name:'Singapore',             code:'+65'  },
+    { name:'South Africa',          code:'+27'  },
+    { name:'Spain',                 code:'+34'  },
+    { name:'Sri Lanka',             code:'+94'  },
+    { name:'Sweden',                code:'+46'  },
+    { name:'Switzerland',           code:'+41'  },
+    { name:'Taiwan',                code:'+886' },
+    { name:'Tanzania',              code:'+255' },
+    { name:'Thailand',              code:'+66'  },
+    { name:'Tunisia',               code:'+216' },
+    { name:'Turkey',                code:'+90'  },
+    { name:'Ukraine',               code:'+380' },
+    { name:'United Arab Emirates',  code:'+971' },
+    { name:'United Kingdom',        code:'+44'  },
+    { name:'United States',         code:'+1'   },
+    { name:'Uzbekistan',            code:'+998' },
+    { name:'Vietnam',               code:'+84'  },
+    { name:'Zambia',                code:'+260' },
+    { name:'Zimbabwe',              code:'+263' }
+  ];
+
+  var F1_SHORT = {
+    'United States':'US','United Kingdom':'UK','United Arab Emirates':'UAE',
+    'South Korea':'KR','South Africa':'SA','Hong Kong':'HK',
+    'New Zealand':'NZ','Saudi Arabia':'SA','Sri Lanka':'LK'
+  };
+
+  function f1RenderDropdown() {
+    var dd = document.getElementById('f1CountryDropdown');
+    var html = '';
+    for (var i = 0; i < F1_COUNTRIES.length; i++) {
+      var c = F1_COUNTRIES[i];
+      var isSel = c.name === f1SelCountry.name;
+      html += '<div class="f1-dd-row' + (isSel ? ' selected' : '') +
+        '" onclick="f1SelectCountry(' + i + ')">' +
+        '<span class="f1-dd-name">' + c.name + '</span>' +
+        '<span class="f1-dd-code">' + c.code + '</span>' +
+        '</div>';
+    }
+    dd.innerHTML = html;
+  }
+
+  function f1ToggleDropdown(e, btnId) {
+    e.stopPropagation();
+    f1DropdownOpen = !f1DropdownOpen;
+    if (f1DropdownOpen) {
+      f1RenderDropdown();
+      var dd = document.getElementById('f1CountryDropdown');
+      dd.style.display = 'flex';
+      var btn = document.getElementById(btnId);
+      var panel = btn.closest('.login-panel');
+      var btnRect = btn.getBoundingClientRect();
+      var panelRect = panel.getBoundingClientRect();
+      dd.style.top = (btnRect.bottom - panelRect.top + 6) + 'px';
+      dd.style.left = (btnRect.left - panelRect.left) + 'px';
+      setTimeout(function() {
+        var sel = dd.querySelector('.selected');
+        if (sel) sel.scrollIntoView({ block: 'center' });
+      }, 10);
+    } else {
+      document.getElementById('f1CountryDropdown').style.display = 'none';
+    }
+  }
+
+  function f1SelectCountry(idx) {
+    var c = F1_COUNTRIES[idx];
+    if (!c) return;
+    f1SelCountry = c;
+    var abbrev = F1_SHORT[c.name] || c.name.substring(0, 2).toUpperCase();
+    var label = abbrev + ' ' + c.code;
+    var dPhone = document.getElementById('f1CountryDisplayPhone');
+    var dPass = document.getElementById('f1CountryDisplayPass');
+    if (dPhone) dPhone.textContent = label;
+    if (dPass) dPass.textContent = label;
+    f1DropdownOpen = false;
+    document.getElementById('f1CountryDropdown').style.display = 'none';
+  }
+
+  /* ── Flow selector ── */
+  var flowSelectorOpen = false;
   function toggleFlowSelector() {
     flowSelectorOpen = !flowSelectorOpen;
     document.getElementById('flowSelector').style.display = flowSelectorOpen ? 'block' : 'none';
     document.getElementById('peepholeIcon').src = flowSelectorOpen
       ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
   }
+  function closeFlowSelectorAndOpen() {
+    document.getElementById('flowSelector').style.display = 'none';
+    document.getElementById('peepholeIcon').src = 'Assets/Icons/Eye_Open.svg';
+    flowSelectorOpen = false;
+    openPanel();
+  }
 
   document.addEventListener('click', function(e) {
-    var selector = document.getElementById('flowSelector');
-    var btn = document.getElementById('peepholeBtn');
-    if (flowSelectorOpen && !selector.contains(e.target) && !btn.contains(e.target)) {
-      selector.style.display = 'none';
-      document.getElementById('peepholeIcon').src = 'Assets/Icons/Eye_Open.svg';
-      flowSelectorOpen = false;
+    if (f1DropdownOpen) {
+      var dd = document.getElementById('f1CountryDropdown');
+      var b1 = document.getElementById('f1CountryBtnPhone');
+      var b2 = document.getElementById('f1CountryBtnPass');
+      if (!dd.contains(e.target) && (!b1 || !b1.contains(e.target)) && (!b2 || !b2.contains(e.target))) {
+        f1DropdownOpen = false;
+        dd.style.display = 'none';
+      }
+    }
+    if (flowSelectorOpen) {
+      var sel = document.getElementById('flowSelector');
+      var peep = document.getElementById('peepholeBtn');
+      if (!sel.contains(e.target) && !peep.contains(e.target)) {
+        sel.style.display = 'none';
+        document.getElementById('peepholeIcon').src = 'Assets/Icons/Eye_Open.svg';
+        flowSelectorOpen = false;
+      }
     }
   });
 </script>
