@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>TikTok — Flow 3</title>
 <link rel="stylesheet" href="shared.css" />
+<script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
 <style>
 .flow-back-link {
   position: fixed; top: 20px; left: 24px; z-index: 99997;
@@ -70,6 +71,52 @@
 .f3-dd-row.highlighted { background: rgba(0,0,0,0.05); }
 .f3-dd-name { color: #000; }
 .f3-dd-code { color: rgba(0,0,0,0.48); }
+
+/* ── Flow 2–style QR card (used in flow3 left QR redesign) ── */
+.f3-qr-card-wrap {
+  width: 180px; height: 180px; flex-shrink: 0;
+  transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 40px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.06);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; cursor: default;
+}
+.f3-qr-img {
+  width: 150px; height: 150px; object-fit: contain;
+  display: block; transition: opacity 0.3s;
+}
+.f3-qr-expired-overlay {
+  display: none; position: absolute; inset: 0;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; border-radius: 40px;
+}
+.f3-qr-refresh-circle {
+  width: 40px; height: 40px; border-radius: 999px;
+  background: rgba(0,0,0,0.48);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.f3-qr-refresh-circle img { width: 20px; height: 20px; display: block; filter: brightness(0) invert(1); }
+.f3-qr-expired-label {
+  font-size: 13px; font-weight: 700; color: #000;
+  text-align: center; line-height: 1.3;
+  font-family: 'TikTokSans', -apple-system, sans-serif;
+  padding: 0 8px;
+}
+.f3-how-to-scan {
+  border: 0.5px solid rgba(0,0,0,0.12); border-radius: 999px;
+  padding: 8px 10px; background: white; cursor: pointer;
+  font-size: 10px; font-family: inherit; color: rgba(0,0,0,0.65);
+  line-height: 1.3; display: flex; align-items: center;
+  transition: background 0.15s;
+}
+.f3-how-to-scan:hover { background: rgba(0,0,0,0.04); }
+.f3-switcher {
+  font-size: 13px; color: #000; text-align: center; line-height: 1.3;
+}
+.f3-switcher span { color: #FE2C55; cursor: pointer; font-weight: 600; }
+.f3-switcher span:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -151,19 +198,19 @@
 <!-- FLOW 3 PANEL -->
 <div id="f3Overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2001;align-items:center;justify-content:center;">
   <div id="f3Card" style="
-    background:white; border-radius:32px; width:660px; height:450px;
-    position:relative; padding:48px 64px 0;
-    font-family:'TikTokSans',-apple-system,BlinkMacSystemFont,sans-serif;
-    display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box;
-  ">
+  background:white; border-radius:64px; width:660px; height:459px;
+  position:relative; padding:36px 64px 36px;
+  font-family:'TikTokSans',-apple-system,BlinkMacSystemFont,sans-serif;
+  display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box;
+">
 
     <!-- Close button -->
-    <button onclick="f3Close()" style="position:absolute;top:20px;right:20px;width:32px;height:32px;background:rgba(0,0,0,0.05);border:none;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;">
+    <button onclick="f3Close()" style="position:absolute;top:32px;right:32px;width:32px;height:32px;background:rgba(0,0,0,0.05);border:none;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;">
       <img src="Assets/Icons/X_Mark.svg" width="18" height="18" alt="Close" />
     </button>
 
     <!-- Back chevron (shown in StateB) -->
-    <div id="f3BackChevron" style="display:none;position:absolute;top:20px;left:20px;width:32px;height:32px;background:rgba(0,0,0,0.05);border-radius:999px;align-items:center;justify-content:center;cursor:pointer;z-index:10;" onclick="f3BackToStateA()">
+    <div id="f3BackChevron" style="display:none;position:absolute;top:32px;left:32px;width:32px;height:32px;background:rgba(0,0,0,0.05);border-radius:999px;align-items:center;justify-content:center;cursor:pointer;z-index:10;" onclick="f3BackToStateA()">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path d="M11 14L6 9L11 4" stroke="rgba(0,0,0,0.6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -176,53 +223,46 @@
 
     <!-- ══════════════ LOGIN SCREEN ══════════════ -->
     <div id="f3LoginScreen" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+            <div style="text-align:center;font-size:24px;font-weight:700;color:#000;margin-bottom:20px;line-height:1.25;flex-shrink:0;">Log in to TikTok</div>
 
-      <div style="text-align:center;font-size:24px;font-weight:700;color:#000;margin-bottom:20px;line-height:1.25;flex-shrink:0;">Log in to TikTok</div>
+      <!-- Content row: 296px fixed height, 32px horizontal gap between QR and form -->
+      <div id="f3ContentRow" style="display:flex;align-items:stretch;height:296px;flex-shrink:0;overflow:visible;gap:32px;">
+                <!-- QR LEFT — flow2 style redesign -->
+        <div id="f3QRLeft" style="display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;padding-top:7.5px;width:224px;height:100%;justify-content:flex-start;">
 
-      <!-- Content row: 228px fixed height -->
-      <div id="f3ContentRow" style="display:flex;align-items:stretch;height:228px;flex-shrink:0;overflow:visible;gap:36px">
+          <!-- Inner content group (16px gaps between label / card / instructions) -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0;">
 
-        <!-- QR LEFT -->
-        <div id="f3QRLeft" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;flex-shrink:0;width:212px;height:100%;">
-          <div id="f3QRCardLeft"
-            onclick="f3QRRefresh()"
-            style="
-              width:180px; height:180px; flex-shrink:0;
-              background:white;
-              border:1px solid rgba(0,0,0,0.05);
-              border-radius:40px;
-              box-shadow:0px 2px 8px rgba(0,0,0,0.06);
-              display:flex; align-items:center; justify-content:center;
-              position:relative; cursor:default;
-            ">
-            <img id="f3QRImageLeft"
-              src="Assets/Images/QR_Code.png" width="150" height="150"
-              style="object-fit:contain;display:block;transition:opacity 0.3s;"
-              alt="QR Code" />
-            <div id="f3QRExpiredLeft" style="
-              display:none; position:absolute; inset:0;
-              flex-direction:column; align-items:center; justify-content:center;
-              gap:12px; border-radius:40px;
-            ">
-              <div style="
-                width:40px; height:40px; flex-shrink:0;
-                background:rgba(0,0,0,0.48); border-radius:999px;
-                display:flex; align-items:center; justify-content:center;
-              ">
-                <img src="Assets/Icons/Arrow_Counter_Clockwise_Fill.svg"
-                  width="20" height="20"
-                  style="display:block; filter:brightness(0) invert(1);"
-                  alt="Refresh" />
+            <div style="font-size:13px;font-weight:600;color:#000;text-align:center;line-height:1.3;">Scan to log in</div>
+
+            <div id="f3QRCardLeft" class="f3-qr-card-wrap" onclick="f3QRRefresh()">
+              <img id="f3QRImageLeft" class="f3-qr-img" src="Assets/Images/QR_Code.png" alt="QR Code" />
+              <div id="f3LottieWrapLeft" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;pointer-events:none;"></div>
+              <div id="f3QRExpiredLeft" class="f3-qr-expired-overlay">
+                <div class="f3-qr-refresh-circle">
+                  <img src="Assets/Icons/arrow_counter_clockwise_fill.svg" alt="Refresh" />
+                </div>
+                <div class="f3-qr-expired-label">QR code expired.<br>Click to refresh</div>
               </div>
-              <div style="
-                font-size:13px; font-weight:700; color:#000;
-                text-align:center; line-height:1.3;
-                font-family:'TikTokSans',-apple-system,sans-serif;
-                padding:0 8px;
-              ">QR code expired.<br>Click to refresh</div>
             </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+              <div style="font-size:10px;color:rgba(0,0,0,0.65);text-align:center;line-height:1.3;max-width:180px;">
+                Open the TikTok app and tap
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:0.5px solid rgba(0,0,0,0.17);border-radius:999px;vertical-align:middle;margin:0 2px;">
+                  <img src="Assets/Icons/Person_Plus.svg" width="10" height="10" style="display:block;" alt="" />
+                </span>
+                in the profile top left corner to scan
+              </div>
+              <button class="f3-how-to-scan"
+                onmouseenter="f3HowToScanEnterLeft()"
+                onmouseleave="f3HowToScanLeaveLeft()">
+                How to scan
+              </button>
+            </div>
+
           </div>
-          <div style="font-size:11px;color:rgba(0,0,0,0.65);text-align:center;line-height:1.4;max-width:180px;">Log in with QR Code</div>
+
         </div>
 
         <!-- Form area -->
@@ -230,18 +270,21 @@
 
           <!-- STATE A: 4 option buttons -->
           <div id="f3StateA" style="display:flex;flex-direction:column;justify-content:center;gap:12px;height:100%;">
-            <button onclick="f3GoPhoneEmail()" class="login-panel-option-btn" style="width:100%;height:44px;flex-shrink:0;">
+            <button onclick="f3GoPhoneEmail()" class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;">
               <div class="login-panel-option-icon"><img src="Assets/Icons/Person_Fill.svg" width="20" height="20" alt="" /></div>Use phone or email
             </button>
-            <button class="login-panel-option-btn" style="width:100%;height:44px;flex-shrink:0;">
+            <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;">
               <div class="login-panel-option-icon"><img src="Assets/Icons/Google.svg" width="20" height="20" alt="" /></div>Continue with Google
             </button>
-            <button class="login-panel-option-btn" style="width:100%;height:44px;flex-shrink:0;">
+            <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;">
               <div class="login-panel-option-icon"><img src="Assets/Icons/Facebook.svg" width="20" height="20" alt="" /></div>Continue with Facebook
             </button>
-            <button class="login-panel-option-btn" style="width:100%;height:44px;flex-shrink:0;">
+            <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;">
               <div class="login-panel-option-icon"><img src="Assets/Icons/Apple.svg" width="20" height="20" alt="" /></div>Continue with AppleID
             </button>
+            <div style="font-size:10px;color:rgba(0,0,0,0.65);text-align:center;line-height:1.4;">
+              By continuing, you agree to TikTok's <a href="#" style="color:#2B5DB9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2B5DB9;text-decoration:none;">Privacy Policy</a>.
+            </div>
           </div>
 
           <!-- STATE B: Phone/Email tabs (Figma 46:7255 / 46:7319) -->
@@ -288,7 +331,7 @@
               <div style="padding-left:8px;flex-shrink:0;">
                 <button class="tt-text-link" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;color:rgba(0,0,0,0.48);cursor:pointer;padding:0;">Use password</button>
               </div>
-              <button id="f3PhoneLoginBtn" style="width:100%;height:52px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;">Log in</button>
+              <button id="f3PhoneLoginBtn" style="width:100%;height:52px;flex-shrink:0;margin-top:auto;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;">Log in</button>
             </div>
 
             <!-- EMAIL TAB — Figma 46:7319 -->
@@ -302,7 +345,7 @@
                   <img id="f3PassIcon" src="Assets/Icons/Eye_Close.svg" width="30" height="30" style="opacity:0.48;display:block;" alt="toggle" />
                 </button>
               </div>
-              <button id="f3EmailLoginBtn" style="width:100%;height:52px;flex-shrink:0;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;">Log in</button>
+              <button id="f3EmailLoginBtn" style="width:100%;height:52px;flex-shrink:0;margin-top:auto;background:rgba(254,44,85,0.4);color:white;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;">Log in</button>
             </div>
 
           </div><!-- end f3StateB -->
@@ -310,60 +353,47 @@
         </div><!-- end f3FormArea -->
 
         
-        <!-- QR RIGHT (Figma 40:4017) — label "Log in with QR Code" SemiBold -->
-        <div id="f3QRRight" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;flex-shrink:0;width:212px;height:100%;">
-          <div id="f3QRCardRight"
-            onclick="f3QRRefresh()"
-            style="
-              width:180px; height:180px; flex-shrink:0;
-              background:white;
-              border:1px solid rgba(0,0,0,0.05);
-              border-radius:40px;
-              box-shadow:0px 2px 8px rgba(0,0,0,0.06);
-              display:flex; align-items:center; justify-content:center;
-              position:relative; cursor:default;
-            ">
-            <img id="f3QRImageRight"
-              src="Assets/Images/QR_Code.png" width="150" height="150"
-              style="object-fit:contain;display:block;transition:opacity 0.3s;"
-              alt="QR Code" />
-            <div id="f3QRExpiredRight" style="
-              display:none; position:absolute; inset:0;
-              flex-direction:column; align-items:center; justify-content:center;
-              gap:12px; border-radius:40px;
-            ">
-              <div style="
-                width:40px; height:40px; flex-shrink:0;
-                background:rgba(0,0,0,0.48); border-radius:999px;
-                display:flex; align-items:center; justify-content:center;
-              ">
-                <img src="Assets/Icons/arrow_counter_clockwise_fill.svg"
-                  width="20" height="20"
-                  style="display:block; filter:brightness(0) invert(1);"
-                  alt="Refresh" />
+        <!-- QR RIGHT — flow2 style -->
+        <div id="f3QRRight" style="display:none;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;padding-top:7.5px;width:224px;height:100%;justify-content:flex-start;">
+
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0;">
+
+            <div style="font-size:13px;font-weight:600;color:#000;text-align:center;line-height:1.3;">Scan to log in</div>
+
+            <div id="f3QRCardRight" class="f3-qr-card-wrap" onclick="f3QRRefresh()">
+              <img id="f3QRImageRight" class="f3-qr-img" src="Assets/Images/QR_Code.png" alt="QR Code" />
+              <div id="f3LottieWrapRight" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;pointer-events:none;"></div>
+              <div id="f3QRExpiredRight" class="f3-qr-expired-overlay">
+                <div class="f3-qr-refresh-circle">
+                  <img src="Assets/Icons/arrow_counter_clockwise_fill.svg" alt="Refresh" />
+                </div>
+                <div class="f3-qr-expired-label">QR code expired.<br>Click to refresh</div>
               </div>
-              <div style="
-                font-size:13px; font-weight:700; color:#000;
-                text-align:center; line-height:1.3;
-                font-family:'TikTokSans',-apple-system,sans-serif;
-                padding:0 8px;
-              ">QR code expired.<br>Click to refresh</div>
             </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
+              <div style="font-size:10px;color:rgba(0,0,0,0.65);text-align:center;line-height:1.3;max-width:180px;">
+                Open the TikTok app and tap
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:0.5px solid rgba(0,0,0,0.17);border-radius:999px;vertical-align:middle;margin:0 2px;">
+                  <img src="Assets/Icons/Person_Plus.svg" width="10" height="10" style="display:block;" alt="" />
+                </span>
+                in the profile top left corner to scan
+              </div>
+              <button class="f3-how-to-scan"
+                onmouseenter="f3HowToScanEnterRight()"
+                onmouseleave="f3HowToScanLeaveRight()">
+                How to scan
+              </button>
+            </div>
+
           </div>
-          <div style="font-size:11px;font-weight:600;color:rgba(0,0,0,0.65);text-align:center;flex-shrink:0;">Log in with QR Code</div>
+
         </div>
 
       </div><!-- end f3ContentRow -->
 
-      <!-- Pinned footer -->
-      <div style="flex:1;"></div>
-      <div style="padding:0 0 32px;flex-shrink:0;">
-        <div style="text-align:center;font-size:10px;color:rgba(0,0,0,0.48);line-height:1.4;padding:0 20px;margin-bottom:16px;">
-          By continuing, you agree to TikTok's <a href="#" style="color:#2B5DB9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2B5DB9;text-decoration:none;">Privacy Policy</a>.
-        </div>
-        <div style="text-align:center;font-size:14px;color:#000;">
-          Don't have an account? <span onclick="f3GoSignup()" class="tt-text-link" style="color:#FE2C55;cursor:pointer;font-weight:600;">Sign up</span>
-        </div>
+      <div class="f3-switcher" style="margin-top:24px;flex-shrink:0;text-align:center;">
+        Don't have an account? <span onclick="f3GoSignup()">Sign up</span>
       </div>
 
     </div><!-- end f3LoginScreen -->
@@ -375,26 +405,26 @@
 
       <!-- 253px wide centered buttons per Figma 42:5263 -->
       <div style="display:flex;flex-direction:column;gap:12px;width:310px;margin:0 auto;flex-shrink:0;">
-        <button class="login-panel-option-btn" style="width:100%;height:48px;flex-shrink:0;font-size:14px;">
+        <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;font-size:14px;">
           <div class="login-panel-option-icon"><img src="Assets/Icons/Person_Fill.svg" width="20" height="20" alt="" /></div>Use phone or email
         </button>
-        <button class="login-panel-option-btn" style="width:100%;height:48px;flex-shrink:0;font-size:14px;">
+        <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;font-size:14px;">
           <div class="login-panel-option-icon"><img src="Assets/Icons/Google.svg" width="20" height="20" alt="" /></div>Continue with Google
         </button>
-        <button class="login-panel-option-btn" style="width:100%;height:48px;flex-shrink:0;font-size:14px;">
+        <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;font-size:14px;">
           <div class="login-panel-option-icon"><img src="Assets/Icons/Facebook.svg" width="20" height="20" alt="" /></div>Continue with Facebook
         </button>
-        <button class="login-panel-option-btn" style="width:100%;height:48px;flex-shrink:0;font-size:14px;">
+        <button class="login-panel-option-btn" style="width:100%;height:52px;flex-shrink:0;font-size:14px;">
           <div class="login-panel-option-icon"><img src="Assets/Icons/Apple.svg" width="20" height="20" alt="" /></div>Continue with AppleID
         </button>
       </div>
 
       <div style="flex:1;"></div>
-      <div style="padding:0 0 32px;flex-shrink:0;">
-        <div style="text-align:center;font-size:10px;color:rgba(0,0,0,0.48);line-height:1.4;padding:0 20px;margin-bottom:16px;">
+      <div style="flex-shrink:0; ">
+        <div style="text-align:center;font-size:10px;color:rgba(0,0,0,0.48);line-height:1.4;margin-left: 48px;margin-right: 48px;margin-bottom:16px;">
           By continuing, you agree to TikTok's <a href="#" style="color:#2B5DB9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2B5DB9;text-decoration:none;">Privacy Policy</a>.
         </div>
-        <div style="text-align:center;font-size:14px;color:#000;">
+        <div style="text-align:center;font-size:13px;color:#000;">
           Already have an account? <span onclick="f3BackToLogin()" class="tt-text-link" style="color:#FE2C55;cursor:pointer;font-weight:600;">Log in</span>
         </div>
       </div>
@@ -600,7 +630,7 @@ function f3Reset() {
   document.getElementById('f3CountryDropdown').style.display = 'none';
   f3DropdownOpen = false;
   /* Restore card padding */
-  document.getElementById('f3Card').style.padding = '48px 64px 0';
+  document.getElementById('f3Card').style.padding = '36px 64px 36px';
   f3ApplyQRSide(f3QRSide);
   f3QRResetAll();
 }
@@ -634,7 +664,7 @@ function f3GoPhoneEmail() {
   /* Show back chevron */
   document.getElementById('f3BackChevron').style.display = 'flex';
   /* Expand horizontal padding for centered form */
-  document.getElementById('f3Card').style.padding = '48px 128px 0';
+  document.getElementById('f3Card').style.padding = '36px 128px 36px';
   /* Reset inputs */
   var pi = document.getElementById('f3PhoneInput'); if(pi) pi.value = '';
   var ei = document.getElementById('f3EmailInput'); if(ei) ei.value = '';
@@ -652,7 +682,7 @@ function f3BackToStateA() {
   document.getElementById('f3StateA').style.display = 'flex';
   document.getElementById('f3StateB').style.display = 'none';
   document.getElementById('f3BackChevron').style.display = 'none';
-  document.getElementById('f3Card').style.padding = '48px 64px 0';
+  document.getElementById('f3Card').style.padding = '36px 64px 36px';
   f3ApplyQRSide(f3QRSide);
 }
 
@@ -689,7 +719,7 @@ function f3BackToLogin() {
   document.getElementById('f3StateA').style.display = 'flex';
   document.getElementById('f3StateB').style.display = 'none';
   document.getElementById('f3BackChevron').style.display = 'none';
-  document.getElementById('f3Card').style.padding = '48px 64px 0';
+  document.getElementById('f3Card').style.padding = '36px 64px 36px';
   f3ApplyQRSide(f3QRSide);
 }
 
@@ -776,6 +806,73 @@ function f3QRRefresh() {
   f3QRClear();
   f3QRResetAll();
   f3QRStart();
+}
+
+/* ══════════════════════════════════
+   "HOW TO SCAN" LOTTIE HOVER
+   ══════════════════════════════════ */
+var f3AnimLeft  = [null];
+var f3AnimRight = [null];
+var F3_LOTTIE_PATH = 'Assets/Animation/Navigation-Bar.json';
+
+function f3ShowLottie(cardId, imgId, wrapId, animRef) {
+  var card = document.getElementById(cardId);
+  var img  = document.getElementById(imgId);
+  var wrap = document.getElementById(wrapId);
+  if (!img || !wrap) return;
+  img.style.opacity = '0';
+  setTimeout(function() {
+    if (card) { card.style.background = 'transparent'; card.style.boxShadow = 'none'; card.style.border = 'none'; }
+    img.style.visibility = 'hidden';
+    wrap.style.display = 'flex';
+    requestAnimationFrame(function() { wrap.style.opacity = '1'; });
+    if (!animRef[0]) {
+      animRef[0] = lottie.loadAnimation({
+        container: wrap, renderer: 'svg',
+        loop: true, autoplay: true,
+        path: F3_LOTTIE_PATH
+      });
+    } else {
+      animRef[0].goToAndPlay(0, true);
+    }
+  }, 200);
+}
+
+function f3HideLottie(cardId, imgId, expId, wrapId, animRef) {
+  var card = document.getElementById(cardId);
+  var img  = document.getElementById(imgId);
+  var exp  = document.getElementById(expId);
+  var wrap = document.getElementById(wrapId);
+  if (!img || !wrap) return;
+  wrap.style.opacity = '0';
+  setTimeout(function() {
+    wrap.style.display = 'none';
+    if (animRef[0]) animRef[0].pause();
+    if (card) { card.style.background = ''; card.style.boxShadow = ''; card.style.border = ''; }
+    img.style.visibility = '';
+    img.style.opacity = (exp && exp.style.display !== 'none') ? '0.06' : '1';
+  }, 200);
+}
+
+function f3HowToScanEnterLeft() {
+  f3QRClear();
+  f3ShowLottie('f3QRCardLeft', 'f3QRImageLeft', 'f3LottieWrapLeft', f3AnimLeft);
+}
+function f3HowToScanLeaveLeft() {
+  var exp = document.getElementById('f3QRExpiredLeft');
+  var wasExpired = exp && exp.style.display !== 'none';
+  f3HideLottie('f3QRCardLeft', 'f3QRImageLeft', 'f3QRExpiredLeft', 'f3LottieWrapLeft', f3AnimLeft);
+  if (!wasExpired) { setTimeout(function() { f3QRStart(); }, 250); }
+}
+function f3HowToScanEnterRight() {
+  f3QRClear();
+  f3ShowLottie('f3QRCardRight', 'f3QRImageRight', 'f3LottieWrapRight', f3AnimRight);
+}
+function f3HowToScanLeaveRight() {
+  var exp = document.getElementById('f3QRExpiredRight');
+  var wasExpired = exp && exp.style.display !== 'none';
+  f3HideLottie('f3QRCardRight', 'f3QRImageRight', 'f3QRExpiredRight', 'f3LottieWrapRight', f3AnimRight);
+  if (!wasExpired) { setTimeout(function() { f3QRStart(); }, 250); }
 }
 </script>
 </body>
