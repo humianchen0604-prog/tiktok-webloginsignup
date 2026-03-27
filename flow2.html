@@ -1058,54 +1058,48 @@
   var f2QRTimer = null;
 
   function f2QRStart() {
-    f2QRReset();
+    f2QRResetAll();
     f2QRTimer = setTimeout(function() {
-      var img = document.getElementById('f2QRImage');
-      var exp = document.getElementById('f2QRExpired');
-      var card = document.getElementById('f2QRCard');
-      if (img) img.style.opacity = '0.06';
-      if (exp) exp.style.display = 'flex';
-      if (card) card.style.cursor = 'pointer';
-      /* Also expire right slot if visible */
-      var imgR = document.getElementById('f2QRImageRight');
-      var expR = document.getElementById('f2QRExpiredRight');
-      var cardR = document.getElementById('f2QRCardRight');
-      if (imgR) imgR.style.opacity = '0.06';
-      if (expR) expR.style.display = 'flex';
-      if (cardR) cardR.style.cursor = 'pointer';
-    }, 30000);
+    ['Left','Right'].forEach(function(side) {
+      var card = document.getElementById('f2QRCard' + side);
+      var img  = document.getElementById('f2QRImage' + side);
+      var exp  = document.getElementById('f2QRExpired' + side);
+      var slot = document.getElementById('f2QR' + side);
+      if (slot && slot.style.display !== 'none') {
+        if (img)  img.style.opacity  = '0.06';
+        if (exp)  exp.style.display  = 'flex';
+        if (card) card.style.cursor  = 'pointer';
+      }
+    });
+  }, 10000);
   }
 
   function f2QRClear() {
     if (f2QRTimer) { clearTimeout(f2QRTimer); f2QRTimer = null; }
   }
 
-  function f2QRReset() {
-    var img = document.getElementById('f2QRImage');
-    var exp = document.getElementById('f2QRExpired');
-    var card = document.getElementById('f2QRCard');
-    if (img) img.style.opacity = '1';
-    if (exp) exp.style.display = 'none';
-    if (card) card.style.cursor = 'default';
-    var imgR = document.getElementById('f2QRImageRight');
-    var expR = document.getElementById('f2QRExpiredRight');
-    var cardR = document.getElementById('f2QRCardRight');
-    if (imgR) imgR.style.opacity = '1';
-    if (expR) expR.style.display = 'none';
-    if (cardR) cardR.style.cursor = 'default';
+  function f2QRResetAll() {
+    ['Left','Right'].forEach(function(side) {
+    var img  = document.getElementById('f2QRImage'   + side);
+    var exp  = document.getElementById('f2QRExpired' + side);
+    var card = document.getElementById('f2QRCard'    + side);
+    if (img)  img.style.opacity  = '1';
+    if (exp)  exp.style.display  = 'none';
+    if (card) card.style.cursor  = 'default';
+  });
   }
 
   function f2QRRefresh() {
-    var exp = document.getElementById('f2QRExpired');
-    if (!exp || exp.style.display === 'none') return;
-    f2QRClear(); f2QRReset(); f2QRStart();
-  }
-
-  function f2QRRefreshRight() {
-    var exp = document.getElementById('f2QRExpiredRight');
-    if (!exp || exp.style.display === 'none') return;
-    f2QRClear(); f2QRReset(); f2QRStart();
-  }
+  var anyExpired = false;
+  ['Left','Right'].forEach(function(side) {
+    var exp = document.getElementById('f2QRExpired' + side);
+    if (exp && exp.style.display !== 'none') anyExpired = true;
+  });
+  if (!anyExpired) return;
+  f2QRClear();
+  f2QRResetAll();
+  f2QRStart();
+}
 
   /* ══════════════════════════════════
      "HOW TO SCAN" HOVER — Lottie animation
