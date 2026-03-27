@@ -1151,23 +1151,23 @@
 
   function f2HowToScanEnter() {
     f2QRClear();
+    var exp = document.getElementById('f2QRExpired');
+    if (exp) exp.style.display = 'none';
     f2ShowLottie('f2QRCard', 'f2QRImage', 'f2LottieWrap', f2AnimLeft);
   }
   function f2HowToScanLeave() {
-    var exp = document.getElementById('f2QRExpired');
-    var wasExpired = exp && exp.style.display !== 'none';
     f2HideLottie('f2QRCard', 'f2QRImage', 'f2QRExpired', 'f2LottieWrap', f2AnimLeft);
-    if (!wasExpired) { setTimeout(function() { f2QRStart(); }, 250); }
+    setTimeout(function() { f2QRStart(); }, 250);
   }
   function f2HowToScanEnterRight() {
     f2QRClear();
+    var exp = document.getElementById('f2QRExpiredRight');
+    if (exp) exp.style.display = 'none';
     f2ShowLottie('f2QRCardRight', 'f2QRImageRight', 'f2LottieWrapRight', f2AnimRight);
   }
   function f2HowToScanLeaveRight() {
-    var exp = document.getElementById('f2QRExpiredRight');
-    var wasExpired = exp && exp.style.display !== 'none';
     f2HideLottie('f2QRCardRight', 'f2QRImageRight', 'f2QRExpiredRight', 'f2LottieWrapRight', f2AnimRight);
-    if (!wasExpired) { setTimeout(function() { f2QRStart(); }, 250); }
+    setTimeout(function() { f2QRStart(); }, 250);
   }
 
   /* ══════════════════════════════════
