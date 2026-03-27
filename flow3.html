@@ -856,23 +856,23 @@ function f3HideLottie(cardId, imgId, expId, wrapId, animRef) {
 
 function f3HowToScanEnterLeft() {
   f3QRClear();
+  var exp = document.getElementById('f3QRExpiredLeft');
+  if (exp) exp.style.display = 'none';
   f3ShowLottie('f3QRCardLeft', 'f3QRImageLeft', 'f3LottieWrapLeft', f3AnimLeft);
 }
 function f3HowToScanLeaveLeft() {
-  var exp = document.getElementById('f3QRExpiredLeft');
-  var wasExpired = exp && exp.style.display !== 'none';
   f3HideLottie('f3QRCardLeft', 'f3QRImageLeft', 'f3QRExpiredLeft', 'f3LottieWrapLeft', f3AnimLeft);
-  if (!wasExpired) { setTimeout(function() { f3QRStart(); }, 250); }
+  setTimeout(function() { f3QRStart(); }, 250);
 }
 function f3HowToScanEnterRight() {
   f3QRClear();
+  var exp = document.getElementById('f3QRExpiredRight');
+  if (exp) exp.style.display = 'none';
   f3ShowLottie('f3QRCardRight', 'f3QRImageRight', 'f3LottieWrapRight', f3AnimRight);
 }
 function f3HowToScanLeaveRight() {
-  var exp = document.getElementById('f3QRExpiredRight');
-  var wasExpired = exp && exp.style.display !== 'none';
   f3HideLottie('f3QRCardRight', 'f3QRImageRight', 'f3QRExpiredRight', 'f3LottieWrapRight', f3AnimRight);
-  if (!wasExpired) { setTimeout(function() { f3QRStart(); }, 250); }
+  setTimeout(function() { f3QRStart(); }, 250);
 }
 </script>
 </body>
