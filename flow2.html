@@ -669,7 +669,7 @@
 
             <div style="font-size:13px;font-weight:600;color:#000;text-align:center;line-height:1.3;">Scan to log in</div>
 
-            <div id="f2QRCardRight" class="f2-qr-card-wrap" onclick="f2QRRefreshRight()">
+            <div id="f2QRCardRight" class="f2-qr-card-wrap" onclick="f2QRRefresh()">
               <img id="f2QRImageRight" class="f2-qr-img" src="Assets/Images/QR_Code.png" alt="QR Code" />
               <div id="f2LottieWrapRight" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;pointer-events:none;"></div>
               <div id="f2QRExpiredRight" class="f2-qr-expired">
@@ -771,7 +771,7 @@
 
   function closeWidePanel() {
     f2QRClear();
-    f2QRReset();
+    f2QRResetAll();
     f2DropdownOpen = false;
     document.getElementById('f2CountryDropdown').style.display = 'none';
     document.getElementById('widePanelOverlay').style.display = 'none';
