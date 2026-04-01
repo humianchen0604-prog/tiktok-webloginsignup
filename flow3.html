@@ -228,9 +228,9 @@
     background: white;
     border-radius: 48px;
     width: 636px;
-    height: 421px;
+    height:440px;
     position: relative;
-    padding: 32px 48px;
+    padding: 36px 48px;
     font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, sans-serif;
     display: flex;
     flex-direction: column;
@@ -239,12 +239,12 @@
   ">
 
     <!-- Close button: right:28.5px, top:28.5px, 32×32px -->
-    <button onclick="f3Close()" style="position:absolute;right:28.5px;top:28.5px;width:32px;height:32px;background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;padding:0;flex-shrink:0;">
+    <button onclick="f3Close()" style="position:absolute;right:32px;top:32px;width:32px;height:32px;background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;padding:0;flex-shrink:0;">
       <img src="Assets/Icons/X_Mark2.svg" width="32" height="32" alt="Close" style="display:block;" />
     </button>
 
     <!-- Back button: left:28.5px, top:28.5px, 32×32px -->
-    <div id="f3BackBtn" style="display:none;position:absolute;left:28.5px;top:28.5px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;z-index:10;flex-shrink:0;" onclick="f3GoBack()">
+    <div id="f3BackBtn" style="display:none;position:absolute;left:32px;top:32px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;z-index:10;flex-shrink:0;" onclick="f3GoBack()">
       <img src="Assets/Icons/Cheveron_Left_LTR2.svg" width="32" height="32" alt="Back" style="display:block;" />
     </div>
 
@@ -254,7 +254,7 @@
     <!-- ═══════════════════════════════════════════════
          SCREEN MAIN — Design 6: QR left + 4 buttons right
          ═══════════════════════════════════════════════ -->
-    <div id="f3ScreenMain" style="display:flex;flex-direction:column;">
+    <div id="f3ScreenMain" style="display:flex;flex-direction:column;flex:1;min-height:0;">
 
       <!-- Title -->
       <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Log in to TikTok</div>
@@ -326,7 +326,7 @@
           </div>
 
           <!-- 16px gap then legal text -->
-          <div style="margin-top:16px;font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;">
+          <div style="margin-top:18px;font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;">
             By continuing, you agree to TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Privacy Policy</a>.
           </div>
 
@@ -334,8 +334,11 @@
 
       </div>
 
-      <!-- "Don't have an account?" — own row, 12px gap below two-column section -->
-      <div style="margin-top:12px;text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+      <!-- 20px gap then footer pinned to bottom via card padding -->
+      <div style="flex:1;min-height:20px;"></div>
+
+      <!-- "Don't have an account?" — 36px from bottom edge via card padding -->
+      <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
         Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
       </div>
 
@@ -349,7 +352,7 @@
       <!-- Title -->
       <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Sign up for TikTok</div>
 
-      <!-- Outer: centers the 280×276 block, then footer below -->
+      <!-- Outer: centers the 280×276 block -->
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;min-height:0;">
 
         <!-- 280×276 shared container: buttons + "By continuing" — justify-between -->
@@ -393,12 +396,13 @@
 
         </div>
 
-        <!-- "Already have an account?" footer sits below the block -->
-        <div style="margin-top:10px;text-align:center;font-size:12px;color:#000;flex-shrink:0;">
-          Already have an account? <span onclick="f3BackToMain()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Log in</span>
-        </div>
-
       </div>
+
+      <!-- "Already have an account?" — pinned to bottom, 36px from edge via card padding -->
+      <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+        Already have an account? <span onclick="f3BackToMain()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Log in</span>
+      </div>
+
     </div><!-- end f3ScreenSignup -->
 
     <!-- ═══════════════════════════════════════════════
@@ -449,7 +453,7 @@
           <button id="f3PhoneLoginBtn" onclick="f3GoOTP()" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
 
           <!-- Legal text: 10px -->
-          <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:10px;">
+          <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:20px;">
             By continuing, you agree to TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Privacy Policy</a>.
           </div>
 
@@ -471,7 +475,7 @@
             <input type="password" placeholder="Password" id="f3EmailPass" oninput="f3CheckEmail()"
               style="width:100%;height:44px;background:rgba(0,0,0,0.05);border:none;border-radius:999px;padding:0 44px 0 16px;font-size:15px;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;" />
             <button onclick="f3ToggleEmailPass()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;line-height:0;">
-              <img id="f3EmailPassIcon" src="Assets/Icons/Eye_Close.svg" style="width:16px;height:16px;display:block;flex-shrink:0;opacity:0.65;" alt="toggle" />
+              <img id="f3EmailPassIcon" src="Assets/Icons/Eye_Close.svg" style="width:20px;height:20px;display:block;flex-shrink:0;opacity:0.65;" alt="toggle" />
             </button>
           </div>
 
@@ -481,7 +485,7 @@
           <button id="f3EmailLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
 
           <!-- Legal -->
-          <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:10px;">
+          <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:20px;">
             By continuing, you agree to TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Privacy Policy</a>.
           </div>
 
@@ -549,7 +553,7 @@
         <button id="f3PasswordLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
 
         <!-- Legal -->
-        <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:10px;">
+        <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:20px;">
           By continuing, you agree to TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Privacy Policy</a>.
         </div>
 
@@ -602,7 +606,7 @@
       </div>
 
       <!-- Legal -->
-      <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:10px;max-width:400px;">
+      <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:20px;max-width:400px;">
         By continuing, you agree to TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Terms of Service</a> and confirm that you have read TikTok's <a href="#" style="color:#2b5db9;text-decoration:none;">Privacy Policy</a>.
       </div>
 
