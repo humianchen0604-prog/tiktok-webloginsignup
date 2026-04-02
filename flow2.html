@@ -7,311 +7,153 @@
 <link rel="stylesheet" href="shared.css" />
 <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
 <style>
-
-/* ── Back link ── */
 .flow-back-link {
   position: fixed; top: 20px; left: 24px; z-index: 99997;
   font-family: 'TikTokSans', -apple-system, sans-serif;
-  font-size: 13px; font-weight: 600; color: rgba(0,0,0,0.48);
+  font-size: 14px; font-weight: 600; color: rgba(0,0,0,0.48);
   text-decoration: none; background: white; border-radius: 999px;
   padding: 6px 14px; box-shadow: 0px 2px 10px rgba(0,0,0,0.10);
   transition: color 0.15s;
 }
 .flow-back-link:hover { color: #FE2C55; }
 
-/* ── Peephole toggle panel ── */
 #peepholeQRToggle {
   position: fixed; bottom: 84px; right: 24px; z-index: 99998;
   background: white; border-radius: 16px;
   box-shadow: 0px 4px 24px rgba(0,0,0,0.15);
-  padding: 16px; width: 260px; display: none;
+  padding: 16px; width: 240px; display: none;
   font-family: 'TikTokSans', -apple-system, sans-serif;
 }
 
-/* ── Country dropdown (Figma 63:4541 style) ── */
-#f2CountryDropdown {
-  position: absolute; z-index: 100; background: white;
-  border-radius: 20px; box-shadow: 0px 0px 24px rgba(0,0,0,0.10);
-  padding: 12px; width: 204px; display: none; flex-direction: column;
-  gap: 2px; max-height: 240px; overflow-y: auto;
-}
-#f2CountryDropdown::-webkit-scrollbar { width: 0; }
-.f2-dd-row {
-  display: flex; align-items: center; justify-content: space-between;
-  height: 40px; padding: 6px 8px; border-radius: 10px; cursor: pointer;
-  flex-shrink: 0; font-family: 'TikTokSans', -apple-system, sans-serif;
-  font-size: 14px; line-height: 22px; white-space: nowrap; transition: background 0.1s;
-}
-.f2-dd-row:hover { background: rgba(0,0,0,0.05); }
-.f2-dd-row.selected { background: transparent; }
-.f2-dd-row.selected .f2-dd-name { color: #FE2C55; font-weight: 600; }
-.f2-dd-row.selected .f2-dd-code { color: #FE2C55; }
-.f2-dd-name { color: #000; }
-.f2-dd-code { color: rgba(0,0,0,0.48); }
-
-/* ── Panel card ── */
-/* Figma: white, border-radius 64px, padding 48px/36px */
-#widePanelCard {
+/* ── Country dropdown ── */
+#f3CountryDropdown {
+  position: absolute;
+  z-index: 200;
   background: white;
-  border-radius: 64px;
-  width: 637px;
-  height: 462px;
-  position: relative;
-  font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, sans-serif;
-  display: flex;
+  border-radius: 20px;
+  box-shadow: 0px 0px 24px rgba(0,0,0,0.10);
+  padding: 12px;
+  width: 204px;
+  display: none;
   flex-direction: column;
-  overflow: hidden;
-  box-sizing: border-box;
+  gap: 2px;
+  max-height: 240px;
+  overflow-y: auto;
 }
+#f3CountryDropdown::-webkit-scrollbar { width: 0; }
 
-/* ── Shared tab bar (Figma: SemiBold 13px, black indicator 2px bottom) ── */
-.f2-tab-bar {
-  display: flex; gap: 0; align-items: flex-start; justify-content: center;
-  flex-shrink: 0; margin-bottom: 0;
+.f3-dd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: 'TikTokSans', -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
+  transition: background 0.1s;
 }
-.f2-tab-item {
-  display: flex; align-items: center; justify-content: center;
-  height: 32px; position: relative; cursor: pointer; flex-shrink: 0;
-  font-size: 13px; font-weight: 600; line-height: 1.3;
-  color: rgba(0,0,0,0.48); background: none; border: none;
-  font-family: inherit; padding: 0 8px;
-}
-.f2-tab-item.active { color: #000; }
-.f2-tab-item.active::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 2px; background: #000; border-radius: 1px;
-}
+.f3-dd-row:hover { background: rgba(0,0,0,0.05); }
+.f3-dd-row.selected .f3-dd-name { color: #FE2C55; font-weight: 600; }
+.f3-dd-row.selected .f3-dd-code { color: #FE2C55; }
+.f3-dd-name { color: #000; }
+.f3-dd-code { color: rgba(0,0,0,0.48); }
 
-/* ── Phone input row ── */
-/* Figma: rgba(0,0,0,0.05) bg, 44px tall, 999px radius capsule */
-.f2-phone-row {
-  display: flex; align-items: center;
-  background: rgba(0,0,0,0.05); border-radius: 999px; height: 44px;
-  overflow: hidden; flex-shrink: 0; width: 100%;
-}
-.f2-country-btn {
-  display: flex; align-items: center; gap: 4px;
-  padding: 0 12px 0 16px;
-  border-right: 0.5px solid rgba(0,0,0,0.17);
-  height: 20px; flex-shrink: 0; cursor: pointer;
-  font-size: 14px; font-family: inherit; color: #000; font-weight: 400;
-  background: none; border-top: none; border-bottom: none; border-left: none;
+/* ── Option buttons (Design 5 & 6): 40px height, 12px font ── */
+.f3-option-btn {
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.05);
+  border: none;
+  font-family: 'TikTokSans', -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.15s;
   white-space: nowrap;
 }
-.f2-country-btn svg { flex-shrink: 0; }
-.f2-phone-input {
-  flex: 1; height: 100%; border: none; background: transparent;
-  padding: 0 12px; font-size: 14px; font-family: inherit; color: #202020;
-  outline: none; caret-color: #FE2C55;
-}
-.f2-phone-input::placeholder { color: rgba(0,0,0,0.34); }
-
-/* ── Text input (capsule, no prefix) ── */
-/* Figma: rgba(0,0,0,0.05), 44px, 999px radius */
-.f2-text-input {
-  width: 100%; height: 44px; flex-shrink: 0;
-  background: rgba(0,0,0,0.05); border: none; border-radius: 999px;
-  padding: 0 16px; font-size: 14px; font-family: inherit; color: #202020;
-  outline: none; caret-color: #FE2C55; box-sizing: border-box;
-}
-.f2-text-input::placeholder { color: rgba(0,0,0,0.34); }
-
-/* ── Password row ── */
-.f2-pw-wrap { position: relative; flex-shrink: 0; width: 100%; }
-.f2-pw-input {
-  width: 100%; height: 44px; background: rgba(0,0,0,0.05); border: none;
-  border-radius: 999px; padding: 0 44px 0 16px; font-size: 14px;
-  font-family: inherit; color: #202020; outline: none;
-  caret-color: #FE2C55; box-sizing: border-box;
-}
-.f2-pw-input::placeholder { color: rgba(0,0,0,0.34); }
-.f2-pw-toggle {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer; padding: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.f2-pw-toggle img { width: 24px; height: 24px; display: block; opacity: 0.48; }
-
-/* ── Log in button ── */
-/* Figma: #FE2C55 at 40% opacity when disabled, full color when ready */
-/* 44px tall, 999px radius, SemiBold 15px white */
-.f2-login-btn {
-  width: 100%; height: 44px; flex-shrink: 0;
-  background: rgba(254,44,85,0.4); color: white;
-  border: none; border-radius: 999px;
-  font-size: 15px; font-weight: 600; font-family: inherit;
-  cursor: not-allowed; transition: background 0.2s;
-}
-.f2-login-btn.ready { background: #FE2C55; cursor: pointer; }
-.f2-login-btn.ready:hover { background: #E5284D; }
-
-/* ── Link texts (10px, rgba(0,0,0,0.65) or 0.48) ── */
-.f2-link-sm {
-  font-size: 10px; color: rgba(0,0,0,0.48); background: none; border: none;
-  font-family: inherit; cursor: pointer; padding: 0; line-height: 1.3;
-}
-.f2-link-sm:hover { text-decoration: underline; }
-.f2-link-muted {
-  font-size: 10px; color: rgba(0,0,0,0.48); background: none; border: none;
-  font-family: inherit; cursor: pointer; padding: 0; line-height: 1.3;
+.f3-option-btn:hover { background: rgba(0,0,0,0.10); }
+.f3-option-icon {
+  position: absolute;
+  left: 14px;
+  display: block;
 }
 
-/* ── Terms text ── */
-.f2-terms {
-  font-size: 10px; color: rgba(0,0,0,0.65); line-height: 1.3;
-  text-align: center; width: 100%;
-}
-.f2-terms a { color: #2B5DB9; text-decoration: none; }
-
-/* ── Signup/login switcher ── */
-.f2-switcher {
-  font-size: 13px; color: #000; text-align: center; line-height: 1.3;
-}
-.f2-switcher span { color: #FE2C55; cursor: pointer; font-weight: 600; }
-.f2-switcher span:hover { text-decoration: underline; }
-
-/* ── 3P circles ── */
-/* Figma: 44px circles, gap 32px */
-.f2-3p-row {
-  display: flex; gap: 32px; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.f2-3p-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background: white;
-  border: 1px solid rgba(0,0,0,0.05);
-  cursor: pointer;
-
+/* ── PIN boxes (Design 2) ── */
+.f3-pin-box {
+  flex: 1;
+  height: 52px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.05);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-
-  transition: box-shadow 0.15s;
-
-  box-shadow: 0px 2px 10px rgba(0,0,0,0.07);
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  font-family: 'TikTokSans', -apple-system, sans-serif;
+  position: relative;
 }
-.f2-3p-btn:hover { box-shadow: 0px 2px 14px rgba(0,0,0,0.12); }
-.f2-3p-btn img { width: 22px; height: 22px; display: block; }
+.f3-pin-active::after {
+  content: '';
+  width: 2px;
+  height: 20px;
+  background: #fe2c55;
+  border-radius: 8px;
+  animation: f3CursorBlink 1s step-end infinite;
+}
+/* Hide cursor when box has a digit */
+.f3-pin-active:not(:empty)::after { display: none; }
+@keyframes f3CursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 
-/* ── QR Card ── */
-/* Figma: white, 180×180, border-radius 40px, shadow */
-.f2-qr-card-wrap {
-  width: 180px; height: 180px; flex-shrink: 0;
-  transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
+/* ── "How to scan" button hover tint ── */
+#f3HowToScanBtn:hover { background: rgba(0,0,0,0.04) !important; }
+
+/* ── Input placeholder color: rgba(0,0,0,0.34) ── */
+#f3Card input::placeholder {
+  color: rgba(0,0,0,0.34);
+  opacity: 1;
+}
+
+/* ── Password input: placeholder 13px, value 16px ── */
+#f3PassInput::placeholder { font-size: 13px; }
+#f3PassInput { font-size: 16px; }
+#f3EmailPassInput::placeholder { font-size: 13px; }
+#f3EmailPassInput { font-size: 16px; }
+
+/* ── Legal links ── */
+.f3-legal-link { color: rgba(0,0,0,0.48); text-decoration: none; transition: color 0.15s; font-weight: 300; }
+.f3-legal-link:hover { color: #2b5db9; }
+
+/* ── QR card ── */
+.f3-qr-card {
+  width: 168px;
+  height: 168px;
+  flex-shrink: 0;
   background: white;
   border: 1px solid rgba(0,0,0,0.05);
-  border-radius: 40px;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.06);
-  display: flex; align-items: center; justify-content: center;
-  position: relative; cursor: default;
+  border-radius: 29.4px;
+  box-shadow: 0px 2px 28px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: default;
+  transition: background 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
-.f2-qr-img {
-  width: 150px; height: 150px; object-fit: contain;
-  display: block; transition: opacity 0.3s;
-}
-
-/* ── QR expired overlay ── */
-.f2-qr-expired {
-  display: none; position: absolute; inset: 0;
-  flex-direction: column; align-items: center; justify-content: center;
-  gap: 12px; border-radius: 40px;
-}
-.f2-qr-refresh-circle {
-  width: 40px; height: 40px; border-radius: 999px;
-  background: rgba(0,0,0,0.48);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.f2-qr-refresh-circle img {
-  width: 20px; height: 20px; display: block;
-  filter: brightness(0) invert(1);
-}
-.f2-qr-expired-text {
-  font-size: 13px; font-weight: 700; color: #000;
-  text-align: center; line-height: 1.3;
-  font-family: 'TikTokSans', -apple-system, sans-serif;
-  padding: 0 8px;
-}
-
-/* ── Left panel (QR column) ── */
-/* Figma Left Panel: col gap 16px, centred, pt 7.5px */
-.f2-left-panel {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 16px; flex-shrink: 0; padding-top: 7.5px;
-  justify-content: flex-start;
-}
-
-/* ── "How to scan" capsule button ── */
-/* Figma: border 0.5px rgba(0,0,0,0.12), 999px radius, p-8px, 10px text */
-.f2-how-to-scan {
-  border: 0.5px solid rgba(0,0,0,0.12); border-radius: 999px;
-  padding: 8px 10px; background: white; cursor: pointer;
-  font-size: 10px; font-family: inherit; color: rgba(0,0,0,0.65);
-  line-height: 1.3; display: flex; align-items: center;
-  transition: background 0.15s;
-}
-.f2-how-to-scan:hover { background: rgba(0,0,0,0.04); }
-
-/* ── Vertical divider ── */
-.f2-divider {
-  width: 1px;
-  align-self: stretch;
-  background: rgba(0,0,0,0.08);
-  flex-shrink: 0;
-  margin: 16px 32px 16px 24px;}
-
-/* ── Right panel (form column) ── */
-.f2-right-panel {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: space-between;
-  flex: 1; min-width: 0;
-}
-
-/* ── PIN row ── */
-/* Figma 80:7525: 6 boxes, each 48px wide × 58.24px tall,
-   border-radius 11.2px, rgba(0,0,0,0.05), gap 6px */
-.f2-pin-row {
-  display: flex; gap: 6px; justify-content: center; width: 100%;
-}
-.f2-pin-box {
-  width: 48px; height: 58px;
-  background: rgba(0,0,0,0.05); border: none;
-  border-radius: 11px; text-align: center;
-  font-size: 20px; font-weight: 600; font-family: inherit;
-  color: #202020; outline: none; caret-color: #FE2C55;
-  transition: box-shadow 0.15s;
-}
-.f2-pin-box:focus { box-shadow: inset 0 0 0 1.5px #FE2C55; }
-
-/* ── Signup option buttons (80:7477) ── */
-/* Figma: 52px tall, rgba(0,0,0,0.05), 999px radius, icon left absolute at 14px, SemiBold 14px */
-.f2-signup-opt-btn {
-  width: 310px; height: 52px; background: rgba(0,0,0,0.05);
-  border: none; border-radius: 999px;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; cursor: pointer; font-family: inherit;
-  font-size: 14px; font-weight: 600; color: #000;
-  transition: background 0.15s; flex-shrink: 0;
-}
-.f2-signup-opt-btn:hover { background: rgba(0,0,0,0.10); }
-.f2-signup-opt-icon {
-  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
-}
-.f2-signup-opt-icon img { width: 20px; height: 20px; display: block; }
-
-/* ── Back chevron circle ── */
-.f2-back-chevron {
-  position: absolute; top: 32px; left: 32px;
-  width: 32px; height: 32px; background: rgba(0,0,0,0.05);
-  border-radius: 999px; display: none; align-items: center;
-  justify-content: center; cursor: pointer; z-index: 10; border: none;
-}
-.f2-back-chevron:hover { background: rgba(0,0,0,0.10); }
-
 </style>
 </head>
 <body>
@@ -342,7 +184,7 @@
           <div class="tt-nav-item"><div class="tt-nav-icon"><img src="Assets/Icons/Live_Wave.svg" width="24" height="24" alt="" /></div>LIVE</div>
           <div class="tt-nav-item"><div class="tt-nav-icon"><img src="Assets/Icons/Ellipsis_Horizontal.svg" width="24" height="24" alt="" /></div>More</div>
         </div>
-        <button class="tt-left-nav-btn" onclick="openWidePanel()">Log in</button>
+        <button class="tt-left-nav-btn" onclick="f3Open()">Log in</button>
         <div class="tt-divider"></div>
         <div class="tt-footer">
           <div class="tt-footer-links"><span>Company</span><span>Programs</span><span>Terms &amp; Policies</span></div>
@@ -360,14 +202,14 @@
           <button class="toolbar-pill-btn"><img src="Assets/Icons/SMS.svg" alt="" />Get App</button>
           <button class="toolbar-pill-btn"><img src="Assets/Icons/Arrow_Down_To_Line.svg" alt="" />PC App</button>
         </div>
-        <button class="toolbar-login-btn" onclick="openWidePanel()">Login</button>
+        <button class="toolbar-login-btn" onclick="f3Open()">Login</button>
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- PEEPHOLE -->
+<!-- PEEPHOLE: Flow selector -->
 <div id="peepholeBtn" onclick="toggleFlowSelector()">
   <img src="Assets/Icons/Eye_Open.svg" id="peepholeIcon" width="24" height="24" alt="Choose flow" />
 </div>
@@ -375,946 +217,1259 @@
 <div id="peepholeQRToggle">
   <div style="font-size:11px;font-weight:600;color:rgba(0,0,0,0.48);margin-bottom:8px;">Choose Login Flow</div>
   <a href="flow1.html" style="text-decoration:none;display:block;margin-bottom:6px;">
-    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-size:12px;font-weight:600;color:#202020;cursor:pointer;">Flow 1 — Current (Mock Online)</div>
+    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-size:12px;font-weight:600;color:#202020;cursor:pointer;">Mock Online</div>
   </a>
   <a href="flow2.html" style="text-decoration:none;display:block;margin-bottom:6px;">
-    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);font-size:12px;font-weight:600;color:#FE2C55;cursor:pointer;">✦ Flow 2 — QR + 1P (Phone/Email focus)</div>
+    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);font-size:12px;font-weight:600;color:#FE2C55;cursor:pointer;">✦ QR + 1P</div>
   </a>
   <a href="flow3.html" style="text-decoration:none;display:block;margin-bottom:12px;">
-    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-size:12px;font-weight:600;color:#202020;cursor:pointer;">Flow 3 — QR + 3P (All buttons)</div>
+    <div style="padding:8px 10px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-size:12px;font-weight:600;color:#202020;cursor:pointer;">QR + 3P</div>
   </a>
   <div style="height:1px;background:rgba(0,0,0,0.08);margin-bottom:10px;"></div>
   <div style="font-size:11px;font-weight:600;color:rgba(0,0,0,0.48);margin-bottom:8px;">QR position:</div>
   <div style="display:flex;gap:6px;">
-    <button onclick="setQRSide('left')" id="qrLeft" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);font-family:inherit;font-size:12px;font-weight:600;color:#FE2C55;cursor:pointer;">← Left</button>
-    <button onclick="setQRSide('right')" id="qrRight" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-family:inherit;font-size:12px;font-weight:600;color:rgba(0,0,0,0.48);cursor:pointer;">Right →</button>
+    <button onclick="f3SetQRSide('left')" id="f3PeepQRLeft" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid #FE2C55;background:rgba(254,44,85,0.05);font-family:inherit;font-size:12px;font-weight:600;color:#FE2C55;cursor:pointer;">← Left</button>
+    <button onclick="f3SetQRSide('right')" id="f3PeepQRRight" style="flex:1;padding:6px;border-radius:8px;border:1.5px solid rgba(0,0,0,0.1);background:white;font-family:inherit;font-size:12px;font-weight:600;color:rgba(0,0,0,0.48);cursor:pointer;">Right →</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     WIDE PANEL OVERLAY
-     ═══════════════════════════════════════ -->
-<div id="widePanelOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;">
-  <div id="widePanelCard">
+<!-- FLOW 2 PANEL (identical to Flow 3) -->
+<div id="f3Overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2001;align-items:center;justify-content:center;">
+  <div id="f3Card" style="
+    background: white;
+    border-radius: 48px;
+    width: 636px;
+    height:436px;
+    position: relative;
+    padding: 36px 48px;
+    font-family: 'TikTokSans', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: visible;
+  ">
 
-    <!-- Country dropdown (absolute inside card) -->
-    <div id="f2CountryDropdown"></div>
-
-    <!-- Close button (top-right, always visible) -->
-    <button id="f2CloseBtn" onclick="closeWidePanel()" style="
-      position:absolute;top:32px;right:32px;
-      width:32px;height:32px;background:rgba(0,0,0,0.05);
-      border:none;border-radius:999px;
-      display:flex;align-items:center;justify-content:center;
-      cursor:pointer;z-index:20;
-    ">
-      <img src="Assets/Icons/X_Mark.svg" width="18" height="18" alt="Close" />
+    <!-- Close button: right:28.5px, top:28.5px, 32×32px -->
+    <button onclick="f3Close()" style="position:absolute;right:32px;top:32px;width:32px;height:32px;background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;padding:0;flex-shrink:0;">
+      <img src="Assets/Icons/X_Mark2.svg" width="32" height="32" alt="Close" style="display:block;" />
     </button>
 
-    <!-- Back chevron (shown only in PIN view) -->
-    <button id="f2BackChevron" class="f2-back-chevron" onclick="goBackFromPin()">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <path d="M11 14L6 9L11 4" stroke="rgba(0,0,0,0.6)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
+    <!-- Back button: left:28.5px, top:28.5px, 32×32px -->
+    <div id="f3BackBtn" style="display:none;position:absolute;left:32px;top:32px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;z-index:10;flex-shrink:0;" onclick="f3GoBack()">
+      <img src="Assets/Icons/Cheveron_Left_LTR2.svg" width="32" height="32" alt="Back" style="display:block;" />
+    </div>
 
-    <!-- ════════════════════════════════
-         LOGIN VIEW (screens 1-3)
-         ════════════════════════════════ -->
-    <div id="f2LoginView" style="padding:36px 48px 36px;display:flex;flex-direction:column;gap:24px;align-items:center;">
+    <!-- Country dropdown: positioned absolutely inside f3Card -->
+    <div id="f3CountryDropdown"></div>
 
-      <!-- Title: "Log in to TikTok" — Bold 20px -->
-      <div id="f2PanelTitle" style="font-size:20px;font-weight:700;color:#000;text-align:center;line-height:1.25;flex-shrink:0;">Log in to TikTok</div>
+    <!-- ═══════════════════════════════════════════════
+         SCREEN MAIN — Design 6: QR left + 4 buttons right
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenMain" style="display:flex;flex-direction:column;flex:1;min-height:0;">
 
-      <!-- Two-column content row: QR + form — height 341.5px, gap 32px -->
-      <div id="f2ContentRow" style="display:flex;align-items:center;gap:0;height:341.5px;flex-shrink:0;width:100%;">
+      <!-- Title -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Log in to TikTok</div>
 
-        <!-- ── QR COLUMN (left default) ── -->
-        <div id="f2QRColLeft" style="display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;padding-top:7.5px;width:224px;">
+      <!-- Two-column content row: fixed 276px height -->
+      <div id="f3TwoColRow" style="display:flex;align-items:stretch;height:276px;flex-shrink:0;gap:28px;">
 
-          <!-- Inner group: label + QR card + instructions (16px between each) -->
-          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0;">
+        <!-- Left QR panel: 234px wide -->
+        <div style="width:234px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;justify-content:flex-start;align-self:flex-start;">
 
-            <div style="font-size:13px;font-weight:600;color:#000;text-align:center;line-height:1.3;">Scan to log in</div>
+          <!-- "Scan to Log In" label: 12px SemiBold, rgba(0,0,0,0.65) -->
+          <div style="font-size:13px;font-weight:400;color:rgba(0,0,0,0.65);text-align:center;line-height:1.3;">Scan to Log In</div>
 
-            <div id="f2QRCard" class="f2-qr-card-wrap" onclick="f2QRRefresh()">
-              <img id="f2QRImage" class="f2-qr-img" src="Assets/Images/QR_Code.png" alt="QR Code" />
-              <div id="f2LottieWrap" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;pointer-events:none;"></div>
-              <div id="f2QRExpired" class="f2-qr-expired">
-                <div class="f2-qr-refresh-circle">
-                  <img src="Assets/Icons/Arrow_Counter_Clockwise_Fill.svg" alt="Refresh" />
-                </div>
-                <div class="f2-qr-expired-text">QR code expired.<br>Click to refresh</div>
+          <!-- QR card: 168×168px, radius:29.4px -->
+          <div id="f3QRCard" class="f3-qr-card" onclick="f3QRRefresh()">
+            <img id="f3QRImage" src="Assets/Images/QR_Code.png" style="width:168px;height:168px;display:block;opacity:1;transition:opacity 560ms cubic-bezier(0.22, 1, 0.36, 1);will-change:opacity;" alt="QR Code" />
+            <!-- Lottie animation wrap (fills card on "How to scan" hover) -->
+<div id="f3LottieWrap" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 680ms cubic-bezier(0.22, 1, 0.36, 1);pointer-events:none;border-radius:29.4px;overflow:hidden;will-change:opacity;background:white;"></div>
+            <div id="f3QRExpired" style="display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:29.4px;">
+              <div style="width:40px;height:40px;border-radius:999px;background:rgba(0,0,0,0.48);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <img src="Assets/Icons/Arrow_Counter_Clockwise_Fill.svg" width="20" height="20" style="filter:brightness(0) invert(1);display:block;" alt="" />
               </div>
+              <div style="font-size:13px;font-weight:700;color:#000;text-align:center;line-height:1.3;padding:0 8px;">QR code expired.<br>Click to refresh</div>
+            </div>
+          </div>
+
+          <!-- Instructions + "How to scan" -->
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:center;width:100%;">
+            <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;max-width:180px;">
+              Open the TikTok app and tap
+              <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border:0.5px solid rgba(0,0,0,0.17);border-radius:999px;vertical-align:middle;margin:0 1px;flex-shrink:0;">
+                <img src="Assets/Icons/Person_Plus.svg" width="10" height="10" style="display:block;padding-left: 1px;" alt="" />
+              </span>
+              in the profile top left corner to scan
+            </div>
+            <button id="f3HowToScanBtn"
+              style="border:0.5px solid rgba(0,0,0,0.12);border-radius:999px;padding:6px 8px;background:transparent;font-size:10px;font-family:inherit;color:rgba(0,0,0,0.65);line-height:1.3;cursor:pointer;transition:background 0.15s;outline:none;"
+              onmouseenter="f3HowToScanEnter()"
+              onmouseleave="f3HowToScanLeave()"
+            >How to scan</button>
+          </div>
+
+        </div>
+
+        <!-- Vertical divider: fills 276px row with 16px inset top/bottom -->
+        <div style="width:0.5px;background:rgba(0,0,0,0.1);flex-shrink:0;align-self:stretch;margin:16px 0;"></div>
+
+        <!-- Right panel: fixed 238px, left pad 12px, flex column, space-between -->
+        <div style="width:238px;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-between;height:100%;box-sizing:border-box;">
+
+          <!-- Top: tab switcher + input -->
+          <div style="display:flex;flex-direction:column;gap:16px;">
+
+            <!-- Tab switcher -->
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0;">
+              <button id="f3TabPhone" onclick="f3SwitchTab('phone')" style="background:none;border:none;font-family:inherit;font-size:13px;font-weight:400;color:#000;cursor:pointer;padding:0;line-height:1.3;white-space:nowrap;">Phone</button>
+              <div id="f3TabDivider" style="width:1px;height:12px;background:rgba(0,0,0,0.17);border-radius:999px;flex-shrink:0;"></div>
+              <button id="f3TabEmail" onclick="f3SwitchTab('email')" style="background:none;border:none;font-family:inherit;font-size:13px;font-weight:400;color:rgba(0,0,0,0.48);cursor:pointer;padding:0;line-height:1.3;white-space:nowrap;">Email or Username</button>
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
-              <div style="font-size:10px;color:rgba(0,0,0,0.65);text-align:center;line-height:1.3;max-width:180px;">
-                Open the TikTok app and tap
-                <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:0.5px solid rgba(0,0,0,0.17);border-radius:999px;vertical-align:middle;margin:0 2px;">
-                  <img src="Assets/Icons/Person_Plus.svg" width="10" height="10" style="display:block;" alt="" />
-                </span>
-                in the profile top left corner to scan
-              </div>
-              <button class="f2-how-to-scan"
-                onmouseenter="f2HowToScanEnter()"
-                onmouseleave="f2HowToScanLeave()">
-                How to scan
+            <!-- Phone input (shown by default) -->
+            <div id="f3MainPhoneInput" style="display:flex;align-items:center;background:#f8f8f8;border-radius:999px;height:44px;overflow:hidden;flex-shrink:0;">
+              <button id="f3CountryBtn" onclick="f3ToggleDropdown(event)" style="display:flex;align-items:center;gap:6px;padding:0 12px 0 12px;height:20px;border-right:0.5px solid rgba(0,0,0,0.17);font-size:13px;font-family:inherit;color:#000;font-weight:400;background:transparent;border-top:none;border-bottom:none;border-left:none;flex-shrink:0;white-space:nowrap;cursor:pointer;letter-spacing:-0.52px;">
+                <span id="f3CountryDisplay">US +1</span>
+                <div style="display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;flex-shrink:0;">
+                  <svg width="8.61" height="5" viewBox="0 0 9 5" fill="none">
+                    <path d="M0.5 0.5l4 4 4-4" stroke="rgba(0,0,0,0.48)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </button>
+              <input type="tel" maxlength="10" placeholder="Phone number" id="f3PhoneInput" oninput="f3MainCheckPhone()"
+                style="flex:1;height:100%;border:none;background:transparent;padding:0 12px;font-size:13px;line-height:1.5;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;border-radius:0 999px 999px 0;" />
+            </div>
+
+            <!-- Email input (hidden by default) -->
+            <input type="text" placeholder="Email or username" id="f3MainEmailInput" oninput="f3MainCheckEmail()"
+              style="display:none;width:100%;height:44px;flex-shrink:0;background:#f8f8f8;border:none;border-radius:999px;padding:0 16px;font-size:13px;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;box-sizing:border-box;" />
+
+          </div>
+
+          <!-- Bottom: Continue + legal + 3P — pinned to bottom, shared across phone/email tabs -->
+          <div style="display:flex;flex-direction:column;flex-shrink:0;">
+            <button id="f3MainContinueBtn" onclick="f3MainContinue()" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:14px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Continue</button>
+            <div style="font-size:10px;color:rgba(0,0,0,0.48);font-weight:300;text-align:center;line-height:1.4;margin-bottom:12px;">
+              By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+            </div>
+            <div style="display:flex;gap:32px;align-items:center;justify-content:center;">
+              <button style="width:44px;height:44px;border-radius:999px;background:white;border:1px solid rgba(0,0,0,0.05);box-shadow:0px 2px 10px rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0px 2px 14px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0px 2px 10px rgba(0,0,0,0.07)'">
+                <img src="Assets/Icons/Google.svg" width="22" height="22" style="display:block;" alt="Google" />
+              </button>
+              <button style="width:44px;height:44px;border-radius:999px;background:white;border:1px solid rgba(0,0,0,0.05);box-shadow:0px 2px 10px rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0px 2px 14px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0px 2px 10px rgba(0,0,0,0.07)'">
+                <img src="Assets/Icons/Facebook.svg" width="22" height="22" style="display:block;" alt="Facebook" />
+              </button>
+              <button style="width:44px;height:44px;border-radius:999px;background:white;border:1px solid rgba(0,0,0,0.05);box-shadow:0px 2px 10px rgba(0,0,0,0.07);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0px 2px 14px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0px 2px 10px rgba(0,0,0,0.07)'">
+                <img src="Assets/Icons/Apple.svg" width="22" height="22" style="display:block;" alt="Apple" />
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 20px gap then footer pinned to bottom via card padding -->
+      <div style="flex:1;min-height:16px;"></div>
+
+      <!-- "Don't have an account?" — 36px from bottom edge via card padding -->
+      <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+        Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+      </div>
+
+    </div><!-- end f3ScreenMain -->
+
+    <!-- ═══════════════════════════════════════════════
+         SCREEN SIGNUP — Design 5: 4 option buttons, no QR
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenSignup" style="display:none;flex-direction:column;flex:1;min-height:0;">
+
+      <!-- Title -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Sign up for TikTok</div>
+
+      <!-- Outer: centers the 280×276 block -->
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;min-height:0;">
+
+        <!-- 280×276 shared container: buttons + "By continuing" — justify-between -->
+        <div style="width:268px;height:276px;display:flex;flex-direction:column;justify-content:space-between;">
+
+          <!-- Button group: pt-20, flex:1 -->
+          <div style="display:flex;flex-direction:column;flex:1 0 0;">
+
+            <!-- Primary CTA: red filled, no icon -->
+            <button style="width:100%;height:42px;border-radius:999px;background:#fe2c55;border:none;font-family:inherit;font-size:12px;font-weight:600;color:white;cursor:default;transition:background 0.15s;margin-bottom:12px;">Use phone or email</button>
+
+            <!-- "or" divider -->
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px; padding-left: 8px;padding-right: 8px;">
+              <div style="flex:1;height:0.5px;background:rgba(0,0,0,0.12);"></div>
+              <span style="font-size:13px;color:rgba(0,0,0,0.48);line-height:1;flex-shrink:0;">or</span>
+              <div style="flex:1;height:0.5px;background:rgba(0,0,0,0.12);"></div>
+            </div>
+
+            <!-- Social buttons: gap-12 -->
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <button class="f3-option-btn" style="width:100%;height:42px;">
+                <img src="Assets/Icons/Google.svg" width="16" height="16" class="f3-option-icon" alt="" />
+                Continue with Google
+              </button>
+              <button class="f3-option-btn" style="width:100%;height:42px;">
+                <img src="Assets/Icons/Facebook.svg" width="16" height="16" class="f3-option-icon" alt="" />
+                Continue with Facebook
+              </button>
+              <button class="f3-option-btn" style="width:100%;height:42px;">
+                <img src="Assets/Icons/Apple.svg" width="16" height="16" class="f3-option-icon" alt="" />
+                Continue with AppleID
               </button>
             </div>
 
           </div>
 
-          <!-- 12px gap (outer gap) before sign-up -->
-          <div class="f2-switcher">
-            Don't have an account? <span onclick="showWideSignup()">Sign up</span>
+          <!-- "By continuing" pinned to bottom of the 276px block -->
+          <div style="flex-shrink:0;font-size:10px;font-weight:300; color:rgba(0,0,0,0.48);text-align:center;line-height:1.4;">
+            By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
           </div>
 
-        </div><!-- end QR col left -->
+        </div>
 
-        <!-- Vertical divider -->
-        <div id="f2DividerLeft" class="f2-divider"></div>
+      </div>
 
-        <!-- ── FORM COLUMN ── -->
-        <div id="f2FormCol" style="display:flex;flex-direction:column;align-items:center;justify-content:space-between;flex:1;height:100%;min-width:0;">
+      <!-- "Already have an account?" — pinned to bottom, 36px from edge via card padding -->
+      <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+        Already have an account? <span onclick="f3BackToMain()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Log in</span>
+      </div>
 
-          <!-- ── PHONE CODE VIEW (default, Screen 1: 80:7236) ── -->
-          <div id="f2PhoneView" style="display:flex;flex-direction:column;align-items:center;gap:0;width:100%;height:100%;justify-content:space-between;">
+    </div><!-- end f3ScreenSignup -->
 
-            <div style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;">
-              <!-- Tab bar -->
-              <div class="f2-tab-bar">
-                <button class="f2-tab-item active" id="f2TabPhone" onclick="switchToPhone()">Phone</button>
-                <button class="f2-tab-item" id="f2TabEmail" onclick="switchToEmail()">Email or Username</button>
-              </div>
-              <!-- Form inputs -->
-              <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;width:100%;">
-                <!-- Phone row -->
-                <div class="f2-phone-row">
-                  <button id="f2CountrySelectorPhone" class="f2-country-btn" onclick="f2ToggleDropdown(event,'f2CountrySelectorPhone')">
-                    <span id="f2CountryTextPhone">US +1</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                  <input class="f2-phone-input" id="f2PhoneInput" type="tel" maxlength="10"
-                    placeholder="Phone Number" oninput="checkPhoneReady()" />
+    <!-- ═══════════════════════════════════════════════
+         SCREEN LOGIN — Design 1 (Phone tab) + Design 4 (Email tab)
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenLogin" style="display:none;flex-direction:column;flex:1;min-height:0;">
+
+      <!-- Title -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Log in to TikTok</div>
+
+      <!-- Centered 280px form -->
+      <div style="width:280px;margin:0 auto;flex:1;display:flex;flex-direction:column;min-height:0;margin-top: 12px;">
+
+        <!-- Tab row: Phone | Email or Username -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;flex-shrink:0;">
+          <button id="f3TabPhone" onclick="f3SwitchTab('phone')" style="background:none;border:none;font-family:inherit;font-size:13px;font-weight:400;color:#000000;cursor:pointer;padding:0;line-height:1.3;white-space:nowrap;">Phone</button>
+          <div style="width:1px;height:12px;background:rgba(0,0,0,0.17);border-radius:999px;flex-shrink:0;"></div>
+          <button id="f3TabEmail" onclick="f3SwitchTab('email')" style="background:none;border:none;font-family:inherit;font-size:13px;font-weight:400;color:rgba(0,0,0,0.48);cursor:pointer;padding:0;line-height:1.3;white-space:nowrap;">Email or Username</button>
+        </div>
+
+        <!-- ── PHONE TAB (Design 1) ── -->
+        <div id="f3PhoneTabContent" style="display:flex;flex-direction:column;flex:1;min-height:0;">
+
+          <div style="position:relative;flex-shrink:0;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;background:#f8f8f8;border-radius:999px;height:44px;overflow:hidden;">
+              <button id="f3CountryBtn" onclick="f3ToggleDropdown(event)" style="display:flex;align-items:center;gap:6px;padding:0 0 0 16px;height:100%;font-size:13px;font-family:inherit;color:#000;font-weight:400;background:transparent;border:none;flex-shrink:0;white-space:nowrap;cursor:pointer;">
+                <span id="f3CountryDisplay">US +1</span>
+                <div style="display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;flex-shrink:0;">
+                  <svg width="8.61" height="5" viewBox="0 0 9 5" fill="none">
+                    <path d="M0.5 0.5l4 4 4-4" stroke="rgba(0,0,0,0.48)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </div>
-                <!-- Use password link -->
-                <div style="padding-left:8px;">
-                  <button class="f2-link-sm" onclick="showPassView()">Use password</button>
-                </div>
-              </div>
+              </button>
+              <div style="width:1px;height:14px;background:rgba(0,0,0,0.17);flex-shrink:0;margin:0 8px;"></div>
+              <input type="tel" maxlength="10" placeholder="Phone number" id="f3PhoneInput" oninput="f3CheckPhone()"
+                style="flex:1;height:100%;border:none;background:transparent;padding:0 12px 0 0;font-size:13px;line-height:1.5;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;" />
             </div>
+          </div>
 
-            <!-- Bottom: button + terms + 3P -->
-            <div style="display:flex;flex-direction:column;gap:12px;align-items:center;width:100%;">
-              <div style="position:relative;width:100%;">
-                <button class="f2-login-btn" id="f2PhoneLoginBtn" onclick="goToPinView()">Log in</button>
-                <div class="f2-terms" style="margin-top:12px;">
-                  By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.
-                </div>
-              </div>
-              <div class="f2-3p-row">
-                <button class="f2-3p-btn"><img src="Assets/Icons/Google.svg" alt="Google" /></button>
-                <button class="f2-3p-btn"><img src="Assets/Icons/Facebook.svg" alt="Facebook" /></button>
-                <button class="f2-3p-btn"><img src="Assets/Icons/Apple.svg" alt="Apple" /></button>
-              </div>
-            </div>
+          <div style="display:flex;justify-content:flex-start;flex-shrink:0;margin-bottom:8px;">
+            <button onclick="f3GoPassword()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0 16px;line-height:1.3;align-self: flex-end;">Use password</button>
+          </div>
 
-          </div><!-- end f2PhoneView -->
+          <div style="flex:1;"></div>
 
-          <!-- ── PHONE PASSWORD VIEW (Screen 2: 80:7302) ── -->
-          <div id="f2PassView" style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;height:100%;justify-content:space-between;">
+          <!-- Log in button: 44px, disabled state -->
+          <button id="f3PhoneLoginBtn" onclick="f3GoOTP()" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
 
-            <div style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;">
-              <!-- Tab bar -->
-              <div class="f2-tab-bar">
-                <button class="f2-tab-item active">Phone</button>
-                <button class="f2-tab-item" onclick="switchToEmail()">Email or Username</button>
-              </div>
-              <!-- Inputs -->
-              <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;width:100%;">
-                <div class="f2-phone-row">
-                  <button id="f2CountrySelectorPass" class="f2-country-btn" onclick="f2ToggleDropdown(event,'f2CountrySelectorPass')">
-                    <span id="f2CountryTextPass">US +1</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M4 6l4 4 4-4" stroke="rgba(0,0,0,0.4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                  <input class="f2-phone-input" id="f2PassPhoneInput" type="tel" maxlength="10"
-                    placeholder="Phone Number" oninput="checkPassReady()" />
-                </div>
-                <!-- Password input -->
-                <div class="f2-pw-wrap">
-                  <input class="f2-pw-input" id="f2PassInput" type="password"
-                    placeholder="Password" oninput="checkPassReady()" />
-                  <button class="f2-pw-toggle" onclick="togglePw('f2PassInput', this)">
-                    <img src="Assets/Icons/Eye_Close.svg" width="24" height="24" alt="Show" />
-                  </button>
-                </div>
-                <!-- Use code / Forgot password -->
-                <div style="display:flex;justify-content:space-between;width:100%;padding:0 8px;box-sizing:border-box;">
-                  <button class="f2-link-sm" onclick="showPhoneView()">Use code</button>
-                  <button class="f2-link-sm">Forgot password?</button>
-                </div>
-              </div>
-            </div>
+          <!-- Legal text: 10px -->
+          <div style="font-size:10px;color:rgba(0,0,0,0.48);font-weight:300; text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:20px;">
+            By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+          </div>
 
-            <div style="display:flex;flex-direction:column;gap:12px;align-items:center;width:100%;">
-              <div style="width:100%;">
-                <button class="f2-login-btn" id="f2PassLoginBtn">Log in</button>
-                <div class="f2-terms" style="margin-top:12px;">
-                  By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.
-                </div>
-              </div>
-              <div class="f2-3p-row">
-                <button class="f2-3p-btn"><img src="Assets/Icons/Google.svg" alt="Google" /></button>
-                <button class="f2-3p-btn"><img src="Assets/Icons/Facebook.svg" alt="Facebook" /></button>
-                <button class="f2-3p-btn"><img src="Assets/Icons/Apple.svg" alt="Apple" /></button>
-              </div>
-            </div>
+          <!-- Footer -->
+          <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+            Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+          </div>
+        </div>
 
-          </div><!-- end f2PassView -->
+        <!-- ── EMAIL TAB (Design 4) ── -->
+        <div id="f3EmailTabContent" style="display:none;flex-direction:column;flex:1;min-height:0;">
 
-          <!-- ── EMAIL VIEW (Screen 3: 80:7387) ── -->
-          <div id="f2EmailView" style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;height:100%;justify-content:space-between;">
+          <!-- Email/Username input: 44px -->
+          <input type="text" placeholder="Email or username" id="f3EmailInput" oninput="f3CheckEmail()"
+            style="width:100%;height:44px;flex-shrink:0;background:#F8F8F8;border:none;border-radius:999px;padding:0 16px;font-size:13px;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;margin-bottom:12px;" />
 
-            <div style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;">
-              <!-- Tab bar — Phone tab at 34% opacity (inactive) -->
-              <div class="f2-tab-bar">
-                <button class="f2-tab-item" onclick="switchToPhone()">Phone</button>
-                <button class="f2-tab-item active">Email or Username</button>
-              </div>
-              <!-- Inputs -->
-              <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;width:100%;">
-                <input class="f2-text-input" id="f2EmailInput" type="text"
-                  placeholder="Email or username" oninput="checkEmailReady()" />
-                <div class="f2-pw-wrap">
-                  <input class="f2-pw-input" id="f2EmailPassInput" type="password"
-                    placeholder="Password" oninput="checkEmailReady()" />
-                  <button class="f2-pw-toggle" onclick="togglePw('f2EmailPassInput', this)">
-                    <img src="Assets/Icons/Eye_Close.svg" width="24" height="24" alt="Show" />
-                  </button>
-                </div>
-                <div style="display:flex;justify-content:space-between;width:100%;padding:0 8px;box-sizing:border-box;">
-                  <button class="f2-link-muted" onclick="switchToPhone()">Use code</button>
-                  <button class="f2-link-muted">Forgot password?</button>
-                </div>
-              </div>
-            </div>
+          <div style="flex:1;"></div>
 
-            <div style="display:flex;flex-direction:column;gap:12px;align-items:center;width:100%;">
-              <div style="width:100%;">
-                <button class="f2-login-btn" id="f2EmailLoginBtn">Log in</button>
-                <div class="f2-terms" style="margin-top:12px;">
-                  By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.
-                </div>
-              </div>
-              <div class="f2-3p-row">
-                <button class="f2-3p-btn"><img src="Assets/Icons/Google.svg" alt="Google" /></button>
-                <button class="f2-3p-btn"><img src="Assets/Icons/Facebook.svg" alt="Facebook" /></button>
-                <button class="f2-3p-btn"><img src="Assets/Icons/Apple.svg" alt="Apple" /></button>
-              </div>
-            </div>
+          <!-- Log in button -->
+          <button id="f3EmailLoginBtn" onclick="f3GoEmailOTPFromLogin()" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
 
-          </div><!-- end f2EmailView -->
+          <!-- Legal -->
+          <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;font-weight:300; line-height:1.4;flex-shrink:0;margin-bottom:20px;">
+            By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+          </div>
 
-          <!-- ── PIN VIEW (Screen 5: 80:7525) ── -->
-          <!-- Figma: fullwidth, no QR, back chevron top-left, centered content -->
-          <div id="f2PinView" style="display:none;flex-direction:column;align-items:center;justify-content:space-between;width:100%;height:100%;">
+          <!-- Footer -->
+          <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+            Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+          </div>
+        </div>
 
-            <div style="display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;margin-top:68px;">
-              <!-- Subtitle -->
-              <p style="font-size:13px;color:rgba(0,0,0,0.48);text-align:center;line-height:1.3;margin:0;">
-                Your code was sent to +1 *******777
-              </p>
-              <!-- 6 PIN boxes -->
-              <div class="f2-pin-row" id="f2PinBoxRow">
-                <input class="f2-pin-box" type="tel" maxlength="1" />
-                <input class="f2-pin-box" type="tel" maxlength="1" />
-                <input class="f2-pin-box" type="tel" maxlength="1" />
-                <input class="f2-pin-box" type="tel" maxlength="1" />
-                <input class="f2-pin-box" type="tel" maxlength="1" />
-                <input class="f2-pin-box" type="tel" maxlength="1" />
-              </div>
-              <!-- Resend code + timer -->
-              <div style="display:flex;align-items:center;gap:4px;justify-content:center;">
-                <button id="f2ResendBtn" style="background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;color:#FE2C55;opacity:0.4;cursor:default;padding:0;line-height:1.3;">Resend code</button>
-                <span id="f2ResendTimer" style="font-size:13px;color:rgba(0,0,0,0.34);line-height:1.3;">10s</span>
-              </div>
-            </div>
+      </div>
+    </div><!-- end f3ScreenLogin -->
 
-            <!-- Bottom: terms + sign up -->
-            <div style="display:flex;flex-direction:column;gap:16px;align-items:center;width:100%;">
-              <div class="f2-terms" style="max-width:400px;">
-                By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.
-              </div>
-              <div class="f2-switcher">
-                Don't have an account? <span onclick="showWideSignup()">Sign up</span>
-              </div>
-            </div>
+    <!-- ═══════════════════════════════════════════════
+         SCREEN PASSWORD — Design 3: Dedicated password verification
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenPassword" style="display:none;flex-direction:column;flex:1;min-height:0;">
 
-          </div><!-- end f2PinView -->
+      <!-- Title -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Enter password</div>
 
-        </div><!-- end f2FormCol -->
+      <div style="width:280px;margin:0 auto;flex:1;display:flex;flex-direction:column;min-height:0;">
 
-        <!-- Divider right (hidden by default, between form and QR-right) -->
-        <div id="f2DividerRight" class="f2-divider" style="display:none;margin:16px 24px 16px 32px;"></div>
+        <!-- Input + Use code: top-aligned to match phone input position (tab row = ~17px + 16px margin = 33px) -->
+        <div style="padding-top:45px;flex-shrink:0;">
+          <div style="display:flex;flex-direction:column;width:100%;">
 
-        <!-- ── QR COLUMN (right, hidden by default) ── -->
-        <div id="f2QRColRight" style="display:none;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;padding-top:7.5px;width:224px;">
-
-          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0;">
-
-            <div style="font-size:13px;font-weight:600;color:#000;text-align:center;line-height:1.3;">Scan to log in</div>
-
-            <div id="f2QRCardRight" class="f2-qr-card-wrap" onclick="f2QRRefresh()">
-              <img id="f2QRImageRight" class="f2-qr-img" src="Assets/Images/QR_Code.png" alt="QR Code" />
-              <div id="f2LottieWrapRight" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;pointer-events:none;"></div>
-              <div id="f2QRExpiredRight" class="f2-qr-expired">
-                <div class="f2-qr-refresh-circle">
-                  <img src="Assets/Icons/Arrow_Counter_Clockwise_Fill.svg" alt="Refresh" />
-                </div>
-                <div class="f2-qr-expired-text">QR code expired.<br>Click to refresh</div>
-              </div>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:8px;align-items:center;">
-              <div style="font-size:10px;color:rgba(0,0,0,0.65);text-align:center;line-height:1.3;max-width:180px;">
-                Open the TikTok app and tap
-                <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border:0.5px solid rgba(0,0,0,0.17);border-radius:999px;vertical-align:middle;margin:0 2px;">
-                  <img src="Assets/Icons/Person_Fill.svg" width="9" height="9" style="display:block;opacity:0.65;" alt="" />
-                </span>
-                in the profile top left corner to scan
-              </div>
-              <button class="f2-how-to-scan"
-                onmouseenter="f2HowToScanEnterRight()"
-                onmouseleave="f2HowToScanLeaveRight()">
-                How to scan
+            <!-- Password input: 44px, #f8f8f8 bg, eye icon 16px -->
+            <div style="position:relative;">
+              <input type="password" placeholder="Password" id="f3PassInput" oninput="f3CheckPassword()"
+                style="width:100%;height:44px;background:#f8f8f8;border:none;border-radius:999px;padding:0 44px 0 16px;line-height:1.3;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;box-sizing:border-box;" />
+              <button onclick="f3TogglePassInput()" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;line-height:0;">
+                <img id="f3PassInputIcon" src="Assets/Icons/Eye_Close.svg" style="width:24px;height:24px;display:block;flex-shrink:0;opacity:0.65;" alt="toggle" />
               </button>
             </div>
 
+            <!-- "Use code" — right-aligned, 8px below input -->
+            <div style="display:flex;justify-content:flex-start;margin-top:10px;">
+              <button onclick="f3GoBack()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0 16px;line-height:1.3;">Use code</button>
+            </div>
+
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+
+        <!-- Log in button -->
+        <button id="f3PasswordLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
+
+        <!-- Legal -->
+        <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;font-weight:300;line-height:1.4;flex-shrink:0;margin-bottom:20px;">
+          By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+          Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+        </div>
+
+      </div>
+    </div><!-- end f3ScreenPassword -->
+
+    <!-- ═══════════════════════════════════════════════
+         SCREEN OTP — Design 2: Enter 6-digit code
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenOTP" style="display:none;flex-direction:column;flex:1;min-height:0;align-items:center;">
+
+      <!-- Title: "Enter 6-digit code" -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:12px;flex-shrink:0;width:100%;">Enter 6-digit code</div>
+
+      <!-- Frame 2053139942: center group — subtitle + pins + resend, vertically centered, pb-20 -->
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding-bottom:20px;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:24;">
+
+          <!-- Subtitle: 13px Regular, rgba(0,0,0,0.48) -->
+          <div style="text-align:center;font-size:12px;color:rgba(0,0,0,0.48);line-height:1.3;margin-bottom:12px;width:280px;">Your code was sent to <span id="f3OTPPhoneDisplay">+1 *******777</span></div>
+
+          <!-- 6 PIN boxes: 48×52px, gap:6px, radius:10px — backed by hidden input -->
+          <div style="position:relative;" onclick="document.getElementById('f3OTPHiddenInput').focus()">
+            <div id="f3PinRow" style="display:flex;gap:6px;width:280px;">
+              <div class="f3-pin-box f3-pin-active" id="f3Pin0"></div>
+              <div class="f3-pin-box" id="f3Pin1"></div>
+              <div class="f3-pin-box" id="f3Pin2"></div>
+              <div class="f3-pin-box" id="f3Pin3"></div>
+              <div class="f3-pin-box" id="f3Pin4"></div>
+              <div class="f3-pin-box" id="f3Pin5"></div>
+            </div>
+            <!-- Hidden input captures keystrokes -->
+            <input id="f3OTPHiddenInput" type="tel" maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+              oninput="f3OTPInput(this.value)"
+              style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:default;border:none;outline:none;font-size:16px;" />
           </div>
 
-          <div class="f2-switcher">
-            Don't have an account? <span onclick="showWideSignup()">Sign up</span>
+          <!-- "Use password" — right-aligned, 8px below PIN boxes -->
+          <div style="display:flex;justify-content:flex-start;width:280px;margin-top:8px;">
+            <button onclick="f3GoPasswordFromOTP()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0px 4px;line-height:1.3;">Use password</button>
           </div>
 
-        </div><!-- end QR col right -->
+          <!-- Resend code + countdown: 16px SemiBold, 40% opacity -->
+          <div style="display:flex;align-items:center;gap:6px;margin-top:24px;">
+            <button id="f3ResendBtn" style="background:none;border:none;font-family:inherit;font-size:14px;font-weight:600;color:#fe2c55;opacity:0.4;cursor:not-allowed;padding:0;line-height:1.3;">Resend code</button>
+            <span id="f3OTPCountdown" style="font-size:14px;color:rgba(0,0,0,0.34);line-height:1.3;">10s</span>
+          </div>
 
-      </div><!-- end f2ContentRow -->
-
-    </div><!-- end f2LoginView -->
-
-    <!-- ════════════════════════════════
-         SIGNUP VIEW (Screen 4: 80:7477)
-         ════════════════════════════════ -->
-    <!-- Figma: no QR, centered, title "Sign up for TikTok" Bold 20px,
-         4 buttons 310px wide 52px tall, rgba(0,0,0,0.05), 999px radius,
-         icon left absolute at 14px, SemiBold 14px -->
-    <div id="f2SignupView" style="display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:36px 48px 36px;gap:24px;height:100%;box-sizing:border-box;">
-
-      <div style="font-size:20px;font-weight:700;color:#000;text-align:center;line-height:1.25;flex-shrink:0;">Sign up for TikTok</div>
-
-      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;flex-shrink:0;">
-        <button class="f2-signup-opt-btn">
-          <div class="f2-signup-opt-icon"><img src="Assets/Icons/Person_Fill.svg" alt="" /></div>
-          Use phone or email
-        </button>
-        <button class="f2-signup-opt-btn">
-          <div class="f2-signup-opt-icon"><img src="Assets/Icons/Google.svg" alt="" /></div>
-          Continue with Google
-        </button>
-        <button class="f2-signup-opt-btn">
-          <div class="f2-signup-opt-icon"><img src="Assets/Icons/Facebook.svg" alt="" /></div>
-          Continue with Facebook
-        </button>
-        <button class="f2-signup-opt-btn">
-          <div class="f2-signup-opt-icon"><img src="Assets/Icons/Apple.svg" alt="" /></div>
-          Continue with AppleID
-        </button>
-      </div>
-
-      <div style="display:flex;flex-direction:column;gap:16px;align-items:center;">
-        <div class="f2-terms" style="max-width:460px;">
-          By continuing, you agree to TikTok's <a href="#">Terms of Service</a> and confirm that you have read TikTok's <a href="#">Privacy Policy</a>.
-        </div>
-        <div class="f2-switcher">
-          Already have an account? <span onclick="hideWideSignup()">Log in</span>
         </div>
       </div>
 
-    </div><!-- end f2SignupView -->
+      <!-- Legal -->
+      <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;font-weight: 300;line-height:1.4;flex-shrink:0;margin-bottom:20px;width:280px;">
+        By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+      </div>
 
-  </div><!-- end widePanelCard -->
-</div><!-- end widePanelOverlay -->
+      <!-- Footer -->
+      <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+        Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+      </div>
+
+    </div><!-- end f3ScreenOTP -->
+
+    <!-- ═══════════════════════════════════════════════
+         SCREEN EMAIL OTP — Enter 6-digit code (email)
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenEmailOTP" style="display:none;flex-direction:column;flex:1;min-height:0;align-items:center;">
+
+      <!-- Title -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:12px;flex-shrink:0;width:100%;">Enter 6-digit code</div>
+
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding-bottom:20px;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+
+          <!-- Subtitle: email address -->
+          <div style="text-align:center;font-size:12px;color:rgba(0,0,0,0.48);line-height:1.3;margin-bottom:12px;width:280px;">Enter the code sent to <span id="f3EmailOTPDisplay"></span></div>
+
+          <!-- 6 PIN boxes -->
+          <div style="position:relative;" onclick="document.getElementById('f3EmailOTPHiddenInput').focus()">
+            <div id="f3EmailPinRow" style="display:flex;gap:6px;width:280px;">
+              <div class="f3-pin-box f3-pin-active" id="f3EPin0"></div>
+              <div class="f3-pin-box" id="f3EPin1"></div>
+              <div class="f3-pin-box" id="f3EPin2"></div>
+              <div class="f3-pin-box" id="f3EPin3"></div>
+              <div class="f3-pin-box" id="f3EPin4"></div>
+              <div class="f3-pin-box" id="f3EPin5"></div>
+            </div>
+            <input id="f3EmailOTPHiddenInput" type="tel" maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+              oninput="f3EmailOTPInput(this.value)"
+              style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:default;border:none;outline:none;font-size:16px;" />
+          </div>
+
+          <!-- "Use password" link → email password screen -->
+          <div style="display:flex;justify-content:flex-start;width:280px;margin-top:8px;">
+            <button onclick="f3GoEmailPassword()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0px 4px;line-height:1.3;">Use password</button>
+          </div>
+
+          <!-- Resend code + countdown -->
+          <div style="display:flex;align-items:center;gap:6px;margin-top:24px;">
+            <button id="f3EmailResendBtn" style="background:none;border:none;font-family:inherit;font-size:14px;font-weight:600;color:#fe2c55;opacity:0.4;cursor:not-allowed;padding:0;line-height:1.3;">Resend code</button>
+            <span id="f3EmailOTPCountdown" style="font-size:14px;color:rgba(0,0,0,0.34);line-height:1.3;">10s</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Legal -->
+      <div style="font-size:10px;color:rgba(0,0,0,0.48);font-weight:300;text-align:center;line-height:1.4;flex-shrink:0;margin-bottom:20px;max-width:280px;">
+        By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+      </div>
+
+      <!-- Footer -->
+      <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+        Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+      </div>
+
+    </div><!-- end f3ScreenEmailOTP -->
+
+    <!-- ═══════════════════════════════════════════════
+         SCREEN EMAIL PASSWORD — Enter password (email)
+         ═══════════════════════════════════════════════ -->
+    <div id="f3ScreenEmailPassword" style="display:none;flex-direction:column;flex:1;min-height:0;">
+
+      <!-- Title -->
+      <div style="text-align:center;font-size:20px;font-weight:700;color:#000;line-height:1.25;margin-bottom:28px;flex-shrink:0;">Enter password</div>
+
+      <!-- Centered 280px form -->
+      <div style="width:280px;margin:0 auto;flex:1;display:flex;flex-direction:column;min-height:0;">
+
+        <!-- Input + Use code: top-aligned -->
+        <div style="padding-top:45px;flex-shrink:0;">
+          <div style="display:flex;flex-direction:column;width:100%;">
+
+            <!-- Password input -->
+            <div style="position:relative;">
+              <input type="password" placeholder="Password" id="f3EmailPassInput" oninput="f3CheckEmailPassword()"
+                style="width:100%;height:44px;background:#f8f8f8;border:none;border-radius:999px;padding:0 44px 0 16px;line-height:1.3;font-family:inherit;color:#202020;outline:none;caret-color:#fe2c55;box-sizing:border-box;" />
+              <button onclick="f3ToggleEmailPassInput()" style="position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;line-height:0;">
+                <img id="f3EmailPassInputIcon" src="Assets/Icons/Eye_Close.svg" style="width:24px;height:24px;display:block;flex-shrink:0;opacity:0.65;" alt="toggle" />
+              </button>
+            </div>
+
+            <!-- "Use code" — routes back to email OTP -->
+            <div style="display:flex;justify-content:flex-start;margin-top:10px;">
+              <button onclick="f3GoEmailOTPFromPasswordScreen()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0 16px;line-height:1.3;">Use code</button>
+            </div>
+
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+
+        <!-- Log in button -->
+        <button id="f3EmailPasswordLoginBtn" style="width:100%;height:44px;flex-shrink:0;background:rgba(254,44,85,0.4);color:#f6f6f6;border:none;border-radius:999px;font-size:15px;font-weight:600;font-family:inherit;cursor:not-allowed;transition:background 0.2s;margin-bottom:12px;">Log in</button>
+
+        <!-- Legal -->
+        <div style="font-size:10px;color:rgba(0,0,0,0.48);text-align:center;font-weight:300;line-height:1.4;flex-shrink:0;margin-bottom:20px;">
+          By continuing, you agree to TikTok's <a href="#" class="f3-legal-link">Terms of Service</a> and confirm that you have read TikTok's <a href="#" class="f3-legal-link">Privacy Policy</a>.
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align:center;font-size:12px;color:#000;flex-shrink:0;">
+          Don't have an account? <span onclick="f3GoSignup()" style="color:#fe2c55;font-weight:600;cursor:pointer;">Sign up</span>
+        </div>
+
+      </div>
+    </div><!-- end f3ScreenEmailPassword -->
+
+  </div><!-- end f3Card -->
+</div><!-- end f3Overlay -->
 
 <script src="shared.js"></script>
 <script>
+/* ════════════════════════════════════
+   COUNTRY DATA
+   ════════════════════════════════════ */
+var F3_COUNTRIES = [
+  { name:'Afghanistan',            code:'+93'  },
+  { name:'Albania',                code:'+355' },
+  { name:'Algeria',                code:'+213' },
+  { name:'American Samoa',         code:'+1684'},
+  { name:'Argentina',              code:'+54'  },
+  { name:'Armenia',                code:'+374' },
+  { name:'Australia',              code:'+61'  },
+  { name:'Austria',                code:'+43'  },
+  { name:'Bahrain',                code:'+973' },
+  { name:'Bangladesh',             code:'+880' },
+  { name:'Belgium',                code:'+32'  },
+  { name:'Brazil',                 code:'+55'  },
+  { name:'Bulgaria',               code:'+359' },
+  { name:'Cambodia',               code:'+855' },
+  { name:'Canada',                 code:'+1'   },
+  { name:'Chile',                  code:'+56'  },
+  { name:'China',                  code:'+86'  },
+  { name:'Colombia',               code:'+57'  },
+  { name:'Croatia',                code:'+385' },
+  { name:'Czech Republic',         code:'+420' },
+  { name:'Denmark',                code:'+45'  },
+  { name:'Egypt',                  code:'+20'  },
+  { name:'Ethiopia',               code:'+251' },
+  { name:'Finland',                code:'+358' },
+  { name:'France',                 code:'+33'  },
+  { name:'Ghana',                  code:'+233' },
+  { name:'Greece',                 code:'+30'  },
+  { name:'Hong Kong',              code:'+852' },
+  { name:'Hungary',                code:'+36'  },
+  { name:'India',                  code:'+91'  },
+  { name:'Indonesia',              code:'+62'  },
+  { name:'Iran',                   code:'+98'  },
+  { name:'Iraq',                   code:'+964' },
+  { name:'Ireland',                code:'+353' },
+  { name:'Israel',                 code:'+972' },
+  { name:'Italy',                  code:'+39'  },
+  { name:'Japan',                  code:'+81'  },
+  { name:'Jordan',                 code:'+962' },
+  { name:'Kazakhstan',             code:'+7'   },
+  { name:'Kenya',                  code:'+254' },
+  { name:'Kuwait',                 code:'+965' },
+  { name:'Laos',                   code:'+856' },
+  { name:'Lebanon',                code:'+961' },
+  { name:'Malaysia',               code:'+60'  },
+  { name:'Mexico',                 code:'+52'  },
+  { name:'Morocco',                code:'+212' },
+  { name:'Myanmar',                code:'+95'  },
+  { name:'Nepal',                  code:'+977' },
+  { name:'Netherlands',            code:'+31'  },
+  { name:'New Zealand',            code:'+64'  },
+  { name:'Nigeria',                code:'+234' },
+  { name:'Norway',                 code:'+47'  },
+  { name:'Oman',                   code:'+968' },
+  { name:'Pakistan',               code:'+92'  },
+  { name:'Philippines',            code:'+63'  },
+  { name:'Poland',                 code:'+48'  },
+  { name:'Portugal',               code:'+351' },
+  { name:'Qatar',                  code:'+974' },
+  { name:'Romania',                code:'+40'  },
+  { name:'Russia',                 code:'+7'   },
+  { name:'Saudi Arabia',           code:'+966' },
+  { name:'Singapore',              code:'+65'  },
+  { name:'South Africa',           code:'+27'  },
+  { name:'South Korea',            code:'+82'  },
+  { name:'Spain',                  code:'+34'  },
+  { name:'Sri Lanka',              code:'+94'  },
+  { name:'Sweden',                 code:'+46'  },
+  { name:'Switzerland',            code:'+41'  },
+  { name:'Taiwan',                 code:'+886' },
+  { name:'Tanzania',               code:'+255' },
+  { name:'Thailand',               code:'+66'  },
+  { name:'Tunisia',                code:'+216' },
+  { name:'Turkey',                 code:'+90'  },
+  { name:'Ukraine',                code:'+380' },
+  { name:'United Arab Emirates',   code:'+971' },
+  { name:'United Kingdom',         code:'+44'  },
+  { name:'United States',          code:'+1'   },
+  { name:'Uzbekistan',             code:'+998' },
+  { name:'Vietnam',                code:'+84'  },
+  { name:'Zambia',                 code:'+260' },
+  { name:'Zimbabwe',               code:'+263' }
+];
 
-  /* ══════════════════════════════════
-     PANEL OPEN / CLOSE
-     ══════════════════════════════════ */
-  var qrSide = 'left';
-  var qrToggleOpen = false;
+/* ════════════════════════════════════
+   STATE
+   ════════════════════════════════════ */
+var f3SelCountry = { name: 'United States', code: '+1' };
+var f3DropdownOpen = false;
+var f3ScreenHistory = [];  /* stack of { screen, tab } */
+var f3QRTimer = null;
+var f3CountdownInterval = null;
+var flowSelectorOpen = false;
 
-  function openWidePanel() {
-    document.getElementById('f2PanelTitle').textContent = 'Log in to TikTok';
-    showLoginView();
-    switchToPhone();
-    showPhoneView();
-    document.getElementById('widePanelOverlay').style.display = 'flex';
-    f2QRClear();
-    f2QRStart();
-  }
-
-  function closeWidePanel() {
-    f2QRClear();
-    f2QRResetAll();
-    f2DropdownOpen = false;
-    document.getElementById('f2CountryDropdown').style.display = 'none';
-    document.getElementById('widePanelOverlay').style.display = 'none';
-    document.getElementById('f2PanelTitle').textContent = 'Log in to TikTok';
-    showLoginView();
-    switchToPhone();
-    showPhoneView();
-  }
-
-  document.getElementById('widePanelOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeWidePanel();
-  });
-
-  /* ══════════════════════════════════
-     LOGIN / SIGNUP TOGGLE
-     ══════════════════════════════════ */
-  function showLoginView() {
-    document.getElementById('f2LoginView').style.display = 'flex';
-    document.getElementById('f2SignupView').style.display = 'none';
-    document.getElementById('f2BackChevron').style.display = 'none';
-    /* Restore card padding */
-    document.getElementById('widePanelCard').style.padding = '0';
-  }
-
-  function showWideSignup() {
-    document.getElementById('f2LoginView').style.display = 'none';
-    document.getElementById('f2SignupView').style.display = 'flex';
-    document.getElementById('f2BackChevron').style.display = 'none';
-    f2QRClear();
-  }
-
-  function hideWideSignup() {
-    showLoginView();
-    switchToPhone();
-    showPhoneView();
-    f2QRStart();
-  }
-
-  /* ══════════════════════════════════
-     TAB SWITCHING
-     ══════════════════════════════════ */
-  function switchToPhone() {
-    showPhoneView();
-  }
-
-  function switchToEmail() {
-    showEmailView();
-  }
-
-  function setTabActive(id, active) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    if (active) { el.classList.add('active'); }
-    else { el.classList.remove('active'); }
-  }
-
-  /* ══════════════════════════════════
-     FORM VIEWS
-     ══════════════════════════════════ */
-  function showPhoneView() {
-    document.getElementById('f2PanelTitle').textContent = 'Log in to TikTok';
-    document.getElementById('f2PhoneView').style.display = 'flex';
-    document.getElementById('f2PassView').style.display = 'none';
-    document.getElementById('f2EmailView').style.display = 'none';
-    document.getElementById('f2PinView').style.display = 'none';
-    document.getElementById('f2BackChevron').style.display = 'none';
-    showQRForCurrentSide();
-    setTabActive('f2TabPhone', true);
-    setTabActive('f2TabEmail', false);
-  }
-
-  function showPassView() {
-    document.getElementById('f2PhoneView').style.display = 'none';
-    document.getElementById('f2PassView').style.display = 'flex';
-    document.getElementById('f2EmailView').style.display = 'none';
-    document.getElementById('f2PinView').style.display = 'none';
-    document.getElementById('f2BackChevron').style.display = 'none';
-    showQRForCurrentSide();
-    setTabActive('f2TabPhone', true);
-    setTabActive('f2TabEmail', false);
-  }
-
-  function showEmailView() {
-    document.getElementById('f2PhoneView').style.display = 'none';
-    document.getElementById('f2PassView').style.display = 'none';
-    document.getElementById('f2EmailView').style.display = 'flex';
-    document.getElementById('f2PinView').style.display = 'none';
-    document.getElementById('f2BackChevron').style.display = 'none';
-    showQRForCurrentSide();
-    setTabActive('f2TabPhone', false);
-    setTabActive('f2TabEmail', true);
-  }
-
-  function goToPinView() {
-    var val = document.getElementById('f2PhoneInput').value.replace(/\D/g,'');
-    if (val.length < 10) return;
-    document.getElementById('f2PhoneView').style.display = 'none';
-    document.getElementById('f2PassView').style.display = 'none';
-    document.getElementById('f2EmailView').style.display = 'none';
-    document.getElementById('f2PinView').style.display = 'flex';
-    document.getElementById('f2PanelTitle').textContent = 'Enter 6-digit code';
-    /* Hide QR in PIN view (Figma 80:7525 is full-width, no QR) */
-    hideAllQR();
-    document.getElementById('f2DividerLeft').style.display = 'none';
-    document.getElementById('f2DividerRight').style.display = 'none';
-    /* Show back chevron */
-    document.getElementById('f2BackChevron').style.display = 'flex';
-    /* Init PIN + countdown */
-    initPinBoxes();
-    startResendCountdown();
-    setTimeout(function() {
-      var first = document.querySelector('#f2PinBoxRow .f2-pin-box');
-      if (first) first.focus();
-    }, 50);
-  }
-
-  function goBackFromPin() {
-    document.getElementById('f2PanelTitle').textContent = 'Log in to TikTok';
-    showPhoneView();
-    document.getElementById('f2BackChevron').style.display = 'none';
-  }
-
-  /* Show/hide QR columns depending on current side */
-  function showQRForCurrentSide() {
-    if (qrSide === 'left') {
-      document.getElementById('f2QRColLeft').style.display = 'flex';
-      document.getElementById('f2DividerLeft').style.display = 'block';
-      document.getElementById('f2QRColRight').style.display = 'none';
-      document.getElementById('f2DividerRight').style.display = 'none';
-      /* Restore row direction */
-      document.getElementById('f2ContentRow').style.flexDirection = 'row';
-    } else {
-      document.getElementById('f2QRColLeft').style.display = 'none';
-      document.getElementById('f2DividerLeft').style.display = 'none';
-      document.getElementById('f2QRColRight').style.display = 'flex';
-      document.getElementById('f2DividerRight').style.display = 'block';
-      document.getElementById('f2ContentRow').style.flexDirection = 'row';
-    }
-  }
-
-  function hideAllQR() {
-    document.getElementById('f2QRColLeft').style.display = 'none';
-    document.getElementById('f2QRColRight').style.display = 'none';
-    document.getElementById('f2DividerLeft').style.display = 'none';
-    document.getElementById('f2DividerRight').style.display = 'none';
-  }
-
-  /* ══════════════════════════════════
-     QR POSITION TOGGLE (peephole)
-     ══════════════════════════════════ */
-  function setQRSide(side) {
-    qrSide = side;
-    /* Update toggle buttons */
-    var l = document.getElementById('qrLeft'); var r = document.getElementById('qrRight');
-    l.style.border = side==='left' ? '1.5px solid #FE2C55' : '1.5px solid rgba(0,0,0,0.1)';
-    l.style.background = side==='left' ? 'rgba(254,44,85,0.05)' : 'white';
-    l.style.color = side==='left' ? '#FE2C55' : 'rgba(0,0,0,0.48)';
-    r.style.border = side==='right' ? '1.5px solid #FE2C55' : '1.5px solid rgba(0,0,0,0.1)';
-    r.style.background = side==='right' ? 'rgba(254,44,85,0.05)' : 'white';
-    r.style.color = side==='right' ? '#FE2C55' : 'rgba(0,0,0,0.48)';
-    /* Only apply if not in PIN view or signup view */
-    var pinVisible = document.getElementById('f2PinView').style.display !== 'none';
-    var signupVisible = document.getElementById('f2SignupView').style.display !== 'none';
-    if (!pinVisible && !signupVisible) {
-      showQRForCurrentSide();
-    }
-  }
-
-  /* ══════════════════════════════════
-     PEEPHOLE TOGGLE
-     ══════════════════════════════════ */
-  function toggleFlowSelector() {
-    qrToggleOpen = !qrToggleOpen;
-    document.getElementById('peepholeQRToggle').style.display = qrToggleOpen ? 'block' : 'none';
-    document.getElementById('peepholeIcon').src = qrToggleOpen
-      ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
-  }
-  document.addEventListener('click', function(e) {
-    var toggle = document.getElementById('peepholeQRToggle');
-    var btn = document.getElementById('peepholeBtn');
-    if (qrToggleOpen && !toggle.contains(e.target) && !btn.contains(e.target)) {
-      toggle.style.display = 'none';
-      document.getElementById('peepholeIcon').src = 'Assets/Icons/Eye_Open.svg';
-      qrToggleOpen = false;
-    }
-    /* Close country dropdown on outside click */
-    if (f2DropdownOpen) {
-      var dd = document.getElementById('f2CountryDropdown');
-      var b1 = document.getElementById('f2CountrySelectorPhone');
-      var b2 = document.getElementById('f2CountrySelectorPass');
-      if (!dd.contains(e.target) && (!b1||!b1.contains(e.target)) && (!b2||!b2.contains(e.target))) {
-        f2DropdownOpen = false;
-        dd.style.display = 'none';
-      }
-    }
-  });
-
-  /* ══════════════════════════════════
-     BUTTON READY STATE
-     ══════════════════════════════════ */
-  function checkPhoneReady() {
-    var val = document.getElementById('f2PhoneInput').value.replace(/\D/g,'');
-    var btn = document.getElementById('f2PhoneLoginBtn');
-    var ready = val.length >= 10;
-    btn.classList.toggle('ready', ready);
-  }
-  function checkPassReady() {
-    var phone = document.getElementById('f2PassPhoneInput').value.replace(/\D/g,'');
-    var pw = document.getElementById('f2PassInput').value;
-    var btn = document.getElementById('f2PassLoginBtn');
-    var ready = phone.length >= 10 && pw.length >= 1;
-    btn.classList.toggle('ready', ready);
-  }
-  function checkEmailReady() {
-    var user = document.getElementById('f2EmailInput').value;
-    var pw = document.getElementById('f2EmailPassInput').value;
-    var btn = document.getElementById('f2EmailLoginBtn');
-    var ready = user.length >= 1 && pw.length >= 1;
-    btn.classList.toggle('ready', ready);
-  }
-
-  /* ══════════════════════════════════
-     PASSWORD TOGGLE
-     ══════════════════════════════════ */
-  function togglePw(inputId, btn) {
-    var inp = document.getElementById(inputId);
-    var img = btn.querySelector('img');
-    if (inp.type === 'password') {
-      inp.type = 'text';
-      img.src = 'Assets/Icons/Eye_Open.svg';
-    } else {
-      inp.type = 'password';
-      img.src = 'Assets/Icons/Eye_Close.svg';
-    }
-  }
-
-  /* ══════════════════════════════════
-     PIN BOXES
-     ══════════════════════════════════ */
-  function initPinBoxes() {
-    var boxes = document.querySelectorAll('#f2PinBoxRow .f2-pin-box');
-    boxes.forEach(function(box) { box.value = ''; });
-    boxes.forEach(function(box, i) {
-      /* Clone to remove old listeners */
-      var newBox = box.cloneNode(true);
-      box.parentNode.replaceChild(newBox, box);
-    });
-    var fresh = document.querySelectorAll('#f2PinBoxRow .f2-pin-box');
-    fresh.forEach(function(box, i) {
-      box.addEventListener('input', function() {
-        this.value = this.value.replace(/\D/g,'').slice(0,1);
-        if (this.value && i < fresh.length - 1) fresh[i+1].focus();
-      });
-      box.addEventListener('keydown', function(e) {
-        if (e.key === 'Backspace' && !this.value && i > 0) fresh[i-1].focus();
-      });
-    });
-  }
-
-  /* ══════════════════════════════════
-     RESEND COUNTDOWN
-     ══════════════════════════════════ */
-  function startResendCountdown() {
-    var t = 10;
-    var btn = document.getElementById('f2ResendBtn');
-    var timer = document.getElementById('f2ResendTimer');
-    btn.style.opacity = '0.4'; btn.style.cursor = 'default';
-    timer.textContent = t + 's';
-    var interval = setInterval(function() {
-      t--;
-      if (t <= 0) {
-        clearInterval(interval);
-        timer.textContent = '';
-        btn.style.opacity = '1'; btn.style.cursor = 'pointer';
-      } else {
-        timer.textContent = t + 's';
-      }
-    }, 1000);
-  }
-
-  /* ══════════════════════════════════
-     QR EXPIRY — LEFT SLOT
-     ══════════════════════════════════ */
-  var f2QRTimer = null;
-
-  function f2QRStart() {
-    f2QRResetAll();
-    f2QRTimer = setTimeout(function() {
-    ['Left','Right'].forEach(function(side) {
-      var card = document.getElementById('f2QRCard' + side);
-      var img  = document.getElementById('f2QRImage' + side);
-      var exp  = document.getElementById('f2QRExpired' + side);
-      var slot = document.getElementById('f2QR' + side);
-      if (slot && slot.style.display !== 'none') {
-        if (img)  img.style.opacity  = '0.06';
-        if (exp)  exp.style.display  = 'flex';
-        if (card) card.style.cursor  = 'pointer';
-      }
-    });
-  }, 10000);
-  }
-
-  function f2QRClear() {
-    if (f2QRTimer) { clearTimeout(f2QRTimer); f2QRTimer = null; }
-  }
-
-  function f2QRResetAll() {
-    ['Left','Right'].forEach(function(side) {
-    var img  = document.getElementById('f2QRImage'   + side);
-    var exp  = document.getElementById('f2QRExpired' + side);
-    var card = document.getElementById('f2QRCard'    + side);
-    if (img)  img.style.opacity  = '1';
-    if (exp)  exp.style.display  = 'none';
-    if (card) card.style.cursor  = 'default';
-  });
-  }
-
-  function f2QRRefresh() {
-  var anyExpired = false;
-  ['Left','Right'].forEach(function(side) {
-    var exp = document.getElementById('f2QRExpired' + side);
-    if (exp && exp.style.display !== 'none') anyExpired = true;
-  });
-  if (!anyExpired) return;
-  f2QRClear();
-  f2QRResetAll();
-  f2QRStart();
+/* ════════════════════════════════════
+   OPEN / CLOSE
+   ════════════════════════════════════ */
+function f3Open() {
+  f3Reset();
+  document.getElementById('f3Overlay').style.display = 'flex';
+  f3QRStart();
 }
 
-  /* ══════════════════════════════════
-     "HOW TO SCAN" HOVER — Lottie animation
-     On enter: fade QR image out, play Navigation-Bar.json on loop
-     On leave: stop animation, fade QR image back in
-     ══════════════════════════════════ */
-  var f2AnimLeft  = [null];
-  var f2AnimRight = [null];
-  var LOTTIE_PATH = 'Assets/Animation/Navigation-Bar.json';
+function f3Close() {
+  f3QRClear();
+  f3OTPClear();
+  f3CloseDropdown();
+  document.getElementById('f3Overlay').style.display = 'none';
+  f3Reset();
+}
 
-  function f2ShowLottie(cardId, imgId, wrapId, animRef) {
-    var card = document.getElementById(cardId);
-    var img  = document.getElementById(imgId);
-    var wrap = document.getElementById(wrapId);
-    if (!img || !wrap) return;
-    img.style.opacity = '0';
-    setTimeout(function() {
-      if (card) { card.style.background = 'transparent'; card.style.boxShadow = 'none'; card.style.border = 'none'; }
-      img.style.visibility = 'hidden';
-      wrap.style.display = 'flex';
-      requestAnimationFrame(function() { wrap.style.opacity = '1'; });
-      if (!animRef[0]) {
-        animRef[0] = lottie.loadAnimation({
-          container: wrap, renderer: 'svg',
-          loop: true, autoplay: true,
-          path: LOTTIE_PATH
-        });
+/* ════════════════════════════════════
+   SCREEN NAVIGATION
+   ════════════════════════════════════ */
+function f3ShowScreen(screenId, showBack) {
+  var screens = ['f3ScreenMain', 'f3ScreenSignup', 'f3ScreenLogin', 'f3ScreenPassword', 'f3ScreenOTP', 'f3ScreenEmailOTP', 'f3ScreenEmailPassword'];
+  screens.forEach(function(id) {
+    document.getElementById(id).style.display = 'none';
+  });
+  document.getElementById(screenId).style.display = 'flex';
+  document.getElementById('f3BackBtn').style.display = showBack ? 'flex' : 'none';
+}
+
+function f3Reset() {
+  f3ScreenHistory = [];
+  f3ShowScreen('f3ScreenMain', false);
+  f3QRResetAll();
+  f3CloseDropdown();
+  f3SwitchTab('phone');
+  var pi = document.getElementById('f3PhoneInput'); if (pi) pi.value = '';
+  var ei = document.getElementById('f3MainEmailInput'); if (ei) ei.value = '';
+  var btn = document.getElementById('f3MainContinueBtn');
+  if (btn) { btn.style.background = 'rgba(254,44,85,0.4)'; btn.style.cursor = 'not-allowed'; }
+}
+
+function f3GoBack() {
+  if (f3ScreenHistory.length === 0) return;
+  var prev = f3ScreenHistory.pop();
+  f3ShowScreen(prev.screen, f3ScreenHistory.length > 0);
+  if (prev.screen === 'f3ScreenLogin') {
+    f3SwitchTab(prev.tab || 'phone');
+  }
+  f3CloseDropdown();
+}
+
+function f3GoPhoneEmail() {
+  f3ScreenHistory.push({ screen: 'f3ScreenMain' });
+  f3ShowScreen('f3ScreenLogin', true);
+  f3SwitchTab('phone');
+  var pi = document.getElementById('f3PhoneInput'); if (pi) pi.value = '';
+  var pb = document.getElementById('f3PhoneLoginBtn'); if (pb) { pb.style.background = 'rgba(254,44,85,0.4)'; pb.style.cursor = 'not-allowed'; }
+}
+
+function f3GoSignup() {
+  f3CloseDropdown();
+  /* Remember where we came from */
+  var screens = ['f3ScreenMain', 'f3ScreenLogin', 'f3ScreenPassword', 'f3ScreenOTP', 'f3ScreenEmailOTP', 'f3ScreenEmailPassword'];
+  var current = 'f3ScreenMain';
+  screens.forEach(function(id) {
+    if (document.getElementById(id).style.display === 'flex') current = id;
+  });
+  f3ScreenHistory.push({ screen: current });
+  f3ShowScreen('f3ScreenSignup', false);
+}
+
+function f3BackToMain() {
+  f3ScreenHistory = [];
+  f3ShowScreen('f3ScreenMain', false);
+}
+
+function f3GoPassword() {
+  f3ScreenHistory.push({ screen: 'f3ScreenLogin', tab: 'phone' });
+  f3ShowPasswordScreen();
+}
+
+function f3GoPasswordFromOTP() {
+  f3ScreenHistory.push({ screen: 'f3ScreenLogin', tab: 'phone' });
+  f3ShowPasswordScreen();
+}
+
+function f3ShowPasswordScreen() {
+  f3ShowScreen('f3ScreenPassword', true);
+  var pw = document.getElementById('f3PassInput'); if (pw) { pw.value = ''; pw.type = 'password'; }
+  var ic = document.getElementById('f3PassInputIcon'); if (ic) ic.src = 'Assets/Icons/Eye_Close.svg';
+  var btn = document.getElementById('f3PasswordLoginBtn'); if (btn) { btn.style.background = 'rgba(254,44,85,0.4)'; btn.style.cursor = 'not-allowed'; }
+  f3CloseDropdown();
+}
+
+function f3GoOTP() {
+  var btn = document.getElementById('f3PhoneLoginBtn');
+  if (!btn || btn.style.cursor === 'not-allowed') return;
+  f3ScreenHistory.push({ screen: 'f3ScreenLogin', tab: 'phone' });
+  f3ShowScreen('f3ScreenOTP', true);
+  f3OTPReset();
+  setTimeout(function() {
+    var inp = document.getElementById('f3OTPHiddenInput');
+    if (inp) inp.focus();
+  }, 50);
+  /* Build masked phone display */
+  var raw = document.getElementById('f3PhoneInput').value.replace(/\D/g,'');
+  var masked = f3SelCountry.code + ' *******' + raw.slice(-3);
+  document.getElementById('f3OTPPhoneDisplay').textContent = masked;
+  /* Start countdown */
+  f3OTPClear();
+  var count = 10;
+  document.getElementById('f3OTPCountdown').textContent = count + 's';
+  var resendBtn = document.getElementById('f3ResendBtn');
+  if (resendBtn) { resendBtn.style.opacity = '0.4'; resendBtn.style.cursor = 'not-allowed'; }
+  f3CountdownInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(f3CountdownInterval);
+      f3CountdownInterval = null;
+      document.getElementById('f3OTPCountdown').textContent = '';
+      if (resendBtn) { resendBtn.style.opacity = '1'; resendBtn.style.cursor = 'pointer'; }
+    } else {
+      document.getElementById('f3OTPCountdown').textContent = count + 's';
+    }
+  }, 1000);
+}
+
+function f3OTPClear() {
+  if (f3CountdownInterval) { clearInterval(f3CountdownInterval); f3CountdownInterval = null; }
+  if (f3EmailCountdownInterval) { clearInterval(f3EmailCountdownInterval); f3EmailCountdownInterval = null; }
+}
+
+var f3EmailCountdownInterval = null;
+function f3GoEmailOTP(email) {
+  f3ScreenHistory.push({ screen: 'f3ScreenLogin', tab: 'email' });
+  f3ShowScreen('f3ScreenEmailOTP', true);
+  document.getElementById('f3EmailOTPDisplay').textContent = email;
+  f3EmailOTPInput('');
+  var inp = document.getElementById('f3EmailOTPHiddenInput');
+  if (inp) inp.value = '';
+  if (f3EmailCountdownInterval) clearInterval(f3EmailCountdownInterval);
+  var count = 10;
+  var countdown = document.getElementById('f3EmailOTPCountdown');
+  var resendBtn = document.getElementById('f3EmailResendBtn');
+  if (countdown) countdown.textContent = count + 's';
+  if (resendBtn) { resendBtn.style.opacity = '0.4'; resendBtn.style.cursor = 'not-allowed'; }
+  f3EmailCountdownInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(f3EmailCountdownInterval); f3EmailCountdownInterval = null;
+      if (countdown) countdown.textContent = '';
+      if (resendBtn) { resendBtn.style.opacity = '1'; resendBtn.style.cursor = 'pointer'; }
+    } else {
+      if (countdown) countdown.textContent = count + 's';
+    }
+  }, 1000);
+  setTimeout(function() { var hi = document.getElementById('f3EmailOTPHiddenInput'); if (hi) hi.focus(); }, 50);
+}
+function f3EmailOTPInput(val) {
+  val = val.replace(/\D/g, '').slice(0, 6);
+  var inp = document.getElementById('f3EmailOTPHiddenInput');
+  if (inp) inp.value = val;
+  for (var i = 0; i < 6; i++) {
+    var box = document.getElementById('f3EPin' + i);
+    if (!box) continue;
+    box.textContent = val[i] || '';
+    var isCursor = (i === val.length && i < 6) || (val.length === 6 && i === 5);
+    if (isCursor) { box.classList.add('f3-pin-active'); } else { box.classList.remove('f3-pin-active'); }
+  }
+}
+function f3GoEmailOTPFromLogin() {
+  var btn = document.getElementById('f3EmailLoginBtn');
+  if (!btn || btn.style.cursor === 'not-allowed') return;
+  var email = document.getElementById('f3EmailInput').value;
+  f3GoEmailOTP(email);
+}
+
+function f3GoEmailPassword() {
+  f3ScreenHistory.push({ screen: 'f3ScreenLogin', tab: 'email' });
+  f3ShowEmailPasswordScreen();
+}
+
+function f3GoEmailOTPFromPasswordScreen() {
+  var email = (document.getElementById('f3MainEmailInput') || {}).value || '';
+  f3GoEmailOTP(email);
+}
+
+function f3ShowEmailPasswordScreen() {
+  f3ShowScreen('f3ScreenEmailPassword', true);
+  var pw = document.getElementById('f3EmailPassInput'); if (pw) { pw.value = ''; pw.type = 'password'; }
+  var ic = document.getElementById('f3EmailPassInputIcon'); if (ic) ic.src = 'Assets/Icons/Eye_Close.svg';
+  var btn = document.getElementById('f3EmailPasswordLoginBtn'); if (btn) { btn.style.background = 'rgba(254,44,85,0.4)'; btn.style.cursor = 'not-allowed'; }
+  f3CloseDropdown();
+}
+
+function f3CheckEmailPassword() {
+  var pw = document.getElementById('f3EmailPassInput').value;
+  var btn = document.getElementById('f3EmailPasswordLoginBtn');
+  if (!btn) return;
+  var ready = pw.length >= 1;
+  btn.style.background = ready ? '#fe2c55' : 'rgba(254,44,85,0.4)';
+  btn.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
+
+function f3ToggleEmailPassInput() {
+  var inp = document.getElementById('f3EmailPassInput');
+  var icon = document.getElementById('f3EmailPassInputIcon');
+  if (!inp) return;
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    if (icon) icon.src = 'Assets/Icons/Eye_Open.svg';
+  } else {
+    inp.type = 'password';
+    if (icon) icon.src = 'Assets/Icons/Eye_Close.svg';
+  }
+}
+
+/* ── OTP PIN input ── */
+function f3OTPInput(val) {
+  /* Strip non-digits, cap at 6 */
+  val = val.replace(/\D/g, '').slice(0, 6);
+  var inp = document.getElementById('f3OTPHiddenInput');
+  if (inp) inp.value = val;
+  for (var i = 0; i < 6; i++) {
+    var box = document.getElementById('f3Pin' + i);
+    if (!box) continue;
+    box.textContent = val[i] || '';
+    /* Cursor: show on the next empty box (or last if full) */
+    var isCursor = (i === val.length && i < 6) || (val.length === 6 && i === 5);
+    if (isCursor) {
+      box.classList.add('f3-pin-active');
+      box.style.setProperty('--show-cursor', val[i] ? 'none' : 'block');
+    } else {
+      box.classList.remove('f3-pin-active');
+    }
+  }
+}
+
+function f3OTPReset() {
+  var inp = document.getElementById('f3OTPHiddenInput');
+  if (inp) inp.value = '';
+  f3OTPInput('');
+}
+
+/* ── Switch from password screen to email login ── */
+function f3SwitchToEmailLogin() {
+  f3ScreenHistory = [{ screen: 'f3ScreenMain' }];
+  f3ShowScreen('f3ScreenLogin', true);
+  f3SwitchTab('email');
+  var ei = document.getElementById('f3EmailInput'); if (ei) ei.value = '';
+  var ep = document.getElementById('f3EmailPass'); if (ep) { ep.value = ''; ep.type = 'password'; }
+  var ic = document.getElementById('f3EmailPassIcon'); if (ic) ic.src = 'Assets/Icons/Eye_Close.svg';
+  var btn = document.getElementById('f3EmailLoginBtn'); if (btn) { btn.style.background = 'rgba(254,44,85,0.4)'; btn.style.cursor = 'not-allowed'; }
+  f3CloseDropdown();
+}
+
+/* ════════════════════════════════════
+   TABS
+   ════════════════════════════════════ */
+var f3MainTab = 'phone';
+
+function f3SwitchTab(tab) {
+  f3MainTab = tab;
+  var isPhone = tab === 'phone';
+
+  /* Style all instances of tab buttons (main panel + login screen share same IDs) */
+  document.querySelectorAll('#f3TabPhone').forEach(function(el) {
+    el.style.color = isPhone ? '#000' : 'rgba(0,0,0,0.48)';
+  });
+  document.querySelectorAll('#f3TabEmail').forEach(function(el) {
+    el.style.color = isPhone ? 'rgba(0,0,0,0.48)' : '#000';
+  });
+  var div = document.getElementById('f3TabDivider');
+  if (div) { div.style.background = isPhone ? 'rgba(0,0,0,0.17)' : '#f1f1f2'; }
+
+  /* Main panel inputs */
+  var phoneInput = document.getElementById('f3MainPhoneInput');
+  var emailInput = document.getElementById('f3MainEmailInput');
+  if (phoneInput) phoneInput.style.display = isPhone ? 'flex' : 'none';
+  if (emailInput) emailInput.style.display = isPhone ? 'none' : 'block';
+
+  /* Login screen tab content */
+  var phoneTab = document.getElementById('f3PhoneTabContent');
+  var emailTab = document.getElementById('f3EmailTabContent');
+  if (phoneTab) phoneTab.style.display = isPhone ? 'flex' : 'none';
+  if (emailTab) emailTab.style.display = isPhone ? 'none' : 'flex';
+
+  /* Reset continue button */
+  var btn = document.getElementById('f3MainContinueBtn');
+  if (btn) { btn.style.background = 'rgba(254,44,85,0.4)'; btn.style.cursor = 'not-allowed'; }
+
+  f3CloseDropdown();
+}
+
+function f3MainCheckPhone() {
+  var val = (document.getElementById('f3PhoneInput') || {}).value || '';
+  val = val.replace(/\D/g, '');
+  var btn = document.getElementById('f3MainContinueBtn');
+  if (!btn) return;
+  var ready = val.length >= 10;
+  btn.style.background = ready ? '#fe2c55' : 'rgba(254,44,85,0.4)';
+  btn.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
+
+function f3MainCheckEmail() {
+  var val = (document.getElementById('f3MainEmailInput') || {}).value || '';
+  var btn = document.getElementById('f3MainContinueBtn');
+  if (!btn) return;
+  var ready = val.length >= 1;
+  btn.style.background = ready ? '#fe2c55' : 'rgba(254,44,85,0.4)';
+  btn.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
+
+function f3MainContinue() {
+  var btn = document.getElementById('f3MainContinueBtn');
+  if (!btn || btn.style.cursor === 'not-allowed') return;
+  if (f3MainTab === 'phone') {
+    /* copy phone value to the login screen input then go OTP */
+    var src = document.getElementById('f3PhoneInput');
+    var dst = document.getElementById('f3PhoneInput'); /* same element reused in login screen */
+    f3ScreenHistory.push({ screen: 'f3ScreenMain' });
+    f3ShowScreen('f3ScreenOTP', true);
+    f3OTPReset();
+    var raw = src ? src.value.replace(/\D/g,'') : '';
+    var masked = f3SelCountry.code + ' *******' + raw.slice(-3);
+    document.getElementById('f3OTPPhoneDisplay').textContent = masked;
+    f3OTPClear();
+    var count = 10;
+    document.getElementById('f3OTPCountdown').textContent = count + 's';
+    var resendBtn = document.getElementById('f3ResendBtn');
+    if (resendBtn) { resendBtn.style.opacity = '0.4'; resendBtn.style.cursor = 'not-allowed'; }
+    f3CountdownInterval = setInterval(function() {
+      count--;
+      if (count <= 0) {
+        clearInterval(f3CountdownInterval); f3CountdownInterval = null;
+        document.getElementById('f3OTPCountdown').textContent = '';
+        if (resendBtn) { resendBtn.style.opacity = '1'; resendBtn.style.cursor = 'pointer'; }
       } else {
-        animRef[0].goToAndPlay(0, true);
+        document.getElementById('f3OTPCountdown').textContent = count + 's';
       }
-    }, 200);
-  }
-
-  function f2HideLottie(cardId, imgId, expId, wrapId, animRef) {
-    var card = document.getElementById(cardId);
-    var img  = document.getElementById(imgId);
-    var exp  = document.getElementById(expId);
-    var wrap = document.getElementById(wrapId);
-    if (!img || !wrap) return;
-    wrap.style.opacity = '0';
+    }, 1000);
     setTimeout(function() {
-      wrap.style.display = 'none';
-      if (animRef[0]) animRef[0].pause();
-      if (card) { card.style.background = ''; card.style.boxShadow = ''; card.style.border = ''; }
-      img.style.visibility = '';
-      img.style.opacity = (exp && exp.style.display !== 'none') ? '0.06' : '1';
-    }, 200);
+      var inp = document.getElementById('f3OTPHiddenInput');
+      if (inp) inp.focus();
+    }, 50);
+  } else {
+    /* email tab → go to email OTP screen */
+    var email = (document.getElementById('f3MainEmailInput') || {}).value || '';
+    f3GoEmailOTP(email);
   }
+}
 
-  function f2HowToScanEnter() {
-    f2QRClear();
-    var exp = document.getElementById('f2QRExpired');
-    if (exp) exp.style.display = 'none';
-    f2ShowLottie('f2QRCard', 'f2QRImage', 'f2LottieWrap', f2AnimLeft);
-  }
-  function f2HowToScanLeave() {
-    f2HideLottie('f2QRCard', 'f2QRImage', 'f2QRExpired', 'f2LottieWrap', f2AnimLeft);
-    setTimeout(function() { f2QRStart(); }, 250);
-  }
-  function f2HowToScanEnterRight() {
-    f2QRClear();
-    var exp = document.getElementById('f2QRExpiredRight');
-    if (exp) exp.style.display = 'none';
-    f2ShowLottie('f2QRCardRight', 'f2QRImageRight', 'f2LottieWrapRight', f2AnimRight);
-  }
-  function f2HowToScanLeaveRight() {
-    f2HideLottie('f2QRCardRight', 'f2QRImageRight', 'f2QRExpiredRight', 'f2LottieWrapRight', f2AnimRight);
-    setTimeout(function() { f2QRStart(); }, 250);
-  }
+/* ════════════════════════════════════
+   INPUT VALIDATION
+   ════════════════════════════════════ */
+function f3CheckPhone() {
+  var val = document.getElementById('f3PhoneInput').value.replace(/\D/g, '');
+  var btn = document.getElementById('f3PhoneLoginBtn');
+  var ready = val.length >= 10;
+  btn.style.background = ready ? '#fe2c55' : 'rgba(254,44,85,0.4)';
+  btn.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
 
-  /* ══════════════════════════════════
-     COUNTRY DROPDOWN
-     ══════════════════════════════════ */
-  var f2SelCountry = { name: 'United States', code: '+1' };
-  var f2DropdownOpen = false;
+function f3CheckEmail() {
+  var user = document.getElementById('f3EmailInput').value;
+  var pw   = document.getElementById('f3EmailPass').value;
+  var btn  = document.getElementById('f3EmailLoginBtn');
+  var ready = user.length >= 1 && pw.length >= 1;
+  btn.style.background = ready ? '#fe2c55' : 'rgba(254,44,85,0.4)';
+  btn.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
 
-  var F2_COUNTRIES = [
-    { name:'Afghanistan',           code:'+93'  },
-    { name:'Albania',               code:'+355' },
-    { name:'Algeria',               code:'+213' },
-    { name:'Argentina',             code:'+54'  },
-    { name:'Armenia',               code:'+374' },
-    { name:'Australia',             code:'+61'  },
-    { name:'Austria',               code:'+43'  },
-    { name:'Bahrain',               code:'+973' },
-    { name:'Bangladesh',            code:'+880' },
-    { name:'Belgium',               code:'+32'  },
-    { name:'Brazil',                code:'+55'  },
-    { name:'Bulgaria',              code:'+359' },
-    { name:'Cambodia',              code:'+855' },
-    { name:'Canada',                code:'+1'   },
-    { name:'Chile',                 code:'+56'  },
-    { name:'China',                 code:'+86'  },
-    { name:'Colombia',              code:'+57'  },
-    { name:'Croatia',               code:'+385' },
-    { name:'Czech Republic',        code:'+420' },
-    { name:'Denmark',               code:'+45'  },
-    { name:'Egypt',                 code:'+20'  },
-    { name:'Ethiopia',              code:'+251' },
-    { name:'Finland',               code:'+358' },
-    { name:'France',                code:'+33'  },
-    { name:'Ghana',                 code:'+233' },
-    { name:'Greece',                code:'+30'  },
-    { name:'Hong Kong',             code:'+852' },
-    { name:'Hungary',               code:'+36'  },
-    { name:'India',                 code:'+91'  },
-    { name:'Indonesia',             code:'+62'  },
-    { name:'Iran',                  code:'+98'  },
-    { name:'Iraq',                  code:'+964' },
-    { name:'Ireland',               code:'+353' },
-    { name:'Israel',                code:'+972' },
-    { name:'Italy',                 code:'+39'  },
-    { name:'Japan',                 code:'+81'  },
-    { name:'Jordan',                code:'+962' },
-    { name:'Kazakhstan',            code:'+7'   },
-    { name:'Kenya',                 code:'+254' },
-    { name:'South Korea',           code:'+82'  },
-    { name:'Kuwait',                code:'+965' },
-    { name:'Laos',                  code:'+856' },
-    { name:'Lebanon',               code:'+961' },
-    { name:'Malaysia',              code:'+60'  },
-    { name:'Mexico',                code:'+52'  },
-    { name:'Morocco',               code:'+212' },
-    { name:'Myanmar',               code:'+95'  },
-    { name:'Nepal',                 code:'+977' },
-    { name:'Netherlands',           code:'+31'  },
-    { name:'New Zealand',           code:'+64'  },
-    { name:'Nigeria',               code:'+234' },
-    { name:'Norway',                code:'+47'  },
-    { name:'Oman',                  code:'+968' },
-    { name:'Pakistan',              code:'+92'  },
-    { name:'Philippines',           code:'+63'  },
-    { name:'Poland',                code:'+48'  },
-    { name:'Portugal',              code:'+351' },
-    { name:'Qatar',                 code:'+974' },
-    { name:'Romania',               code:'+40'  },
-    { name:'Russia',                code:'+7'   },
-    { name:'Saudi Arabia',          code:'+966' },
-    { name:'Singapore',             code:'+65'  },
-    { name:'South Africa',          code:'+27'  },
-    { name:'Spain',                 code:'+34'  },
-    { name:'Sri Lanka',             code:'+94'  },
-    { name:'Sweden',                code:'+46'  },
-    { name:'Switzerland',           code:'+41'  },
-    { name:'Taiwan',                code:'+886' },
-    { name:'Tanzania',              code:'+255' },
-    { name:'Thailand',              code:'+66'  },
-    { name:'Tunisia',               code:'+216' },
-    { name:'Turkey',                code:'+90'  },
-    { name:'Ukraine',               code:'+380' },
-    { name:'United Arab Emirates',  code:'+971' },
-    { name:'United Kingdom',        code:'+44'  },
-    { name:'United States',         code:'+1'   },
-    { name:'Uzbekistan',            code:'+998' },
-    { name:'Vietnam',               code:'+84'  },
-    { name:'Zambia',                code:'+260' },
-    { name:'Zimbabwe',              code:'+263' }
-  ];
+function f3CheckPassword() {
+  var pw  = document.getElementById('f3PassInput').value;
+  var btn = document.getElementById('f3PasswordLoginBtn');
+  var ready = pw.length >= 1;
+  btn.style.background = ready ? '#fe2c55' : 'rgba(254,44,85,0.4)';
+  btn.style.cursor = ready ? 'pointer' : 'not-allowed';
+}
 
-  var F2_SHORT = {
+/* ════════════════════════════════════
+   PASSWORD VISIBILITY TOGGLES
+   ════════════════════════════════════ */
+function f3ToggleEmailPass() {
+  var inp  = document.getElementById('f3EmailPass');
+  var icon = document.getElementById('f3EmailPassIcon');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.src = inp.type === 'password' ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
+}
+
+function f3TogglePassInput() {
+  var inp  = document.getElementById('f3PassInput');
+  var icon = document.getElementById('f3PassInputIcon');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.src = inp.type === 'password' ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
+}
+
+/* ════════════════════════════════════
+   COUNTRY DROPDOWN
+   ════════════════════════════════════ */
+function f3CloseDropdown() {
+  f3DropdownOpen = false;
+  document.getElementById('f3CountryDropdown').style.display = 'none';
+}
+
+function f3RenderDropdown() {
+  var dd   = document.getElementById('f3CountryDropdown');
+  var html = '';
+  for (var i = 0; i < F3_COUNTRIES.length; i++) {
+    var c     = F3_COUNTRIES[i];
+    var isSel = c.name === f3SelCountry.name;
+    html += '<div class="f3-dd-row' + (isSel ? ' selected' : '') + '" onclick="f3SelectCountry(' + i + ')">' +
+      '<span class="f3-dd-name">' + c.name + '</span>' +
+      '<span class="f3-dd-code">' + c.code + '</span>' +
+      '</div>';
+  }
+  dd.innerHTML = html;
+}
+
+function f3OpenDropdownAt(triggerBtn) {
+  f3RenderDropdown();
+  var dd       = document.getElementById('f3CountryDropdown');
+  var card     = document.getElementById('f3Card');
+  var cardRect = card.getBoundingClientRect();
+  /* Use the phone input row bottom (the 44px capsule), not the small button height */
+  var inputRow = document.getElementById('f3MainPhoneInput') || triggerBtn.closest('div') || triggerBtn;
+  var rowRect  = inputRow.getBoundingClientRect();
+  dd.style.top  = (rowRect.bottom - cardRect.top) + 'px';
+  dd.style.left = (rowRect.left - cardRect.left) + 'px';
+  dd.style.display = 'flex';
+  setTimeout(function() {
+    var sel = dd.querySelector('.selected');
+    if (sel) sel.scrollIntoView({ block: 'center' });
+  }, 10);
+}
+
+function f3ToggleDropdown(e) {
+  e.stopPropagation();
+  f3DropdownOpen = !f3DropdownOpen;
+  if (f3DropdownOpen) {
+    f3OpenDropdownAt(document.getElementById('f3CountryBtn'));
+  } else {
+    f3CloseDropdown();
+  }
+}
+
+function f3SelectCountry(idx) {
+  var c = F3_COUNTRIES[idx];
+  if (!c) return;
+  f3SelCountry = c;
+  var SHORT = {
     'United States':'US','United Kingdom':'UK','United Arab Emirates':'UAE',
     'South Korea':'KR','South Africa':'SA','Hong Kong':'HK',
     'New Zealand':'NZ','Saudi Arabia':'SA','Sri Lanka':'LK'
   };
+  var abbrev  = SHORT[c.name] || c.name.substring(0, 2).toUpperCase();
+  var display = abbrev + ' ' + c.code;
+  var cd  = document.getElementById('f3CountryDisplay');
+  if (cd)  cd.textContent  = display;
+  f3CloseDropdown();
+}
 
-  function f2RenderDropdown() {
-    var dd = document.getElementById('f2CountryDropdown');
-    var html = '';
-    for (var i = 0; i < F2_COUNTRIES.length; i++) {
-      var c = F2_COUNTRIES[i];
-      var isSel = c.name === f2SelCountry.name;
-      html += '<div class="f2-dd-row' + (isSel ? ' selected' : '') +
-        '" onclick="f2SelectCountry(' + i + ')">' +
-        '<span class="f2-dd-name">' + c.name + '</span>' +
-        '<span class="f2-dd-code">' + c.code + '</span>' +
-        '</div>';
-    }
-    dd.innerHTML = html;
+/* Close dropdown on outside click */
+document.addEventListener('click', function(e) {
+  if (!f3DropdownOpen) return;
+  var dd   = document.getElementById('f3CountryDropdown');
+  var btn1 = document.getElementById('f3CountryBtn');
+  if (!dd.contains(e.target) && !(btn1 && btn1.contains(e.target))) {
+    f3CloseDropdown();
+  }
+});
+
+/* ════════════════════════════════════
+   QR EXPIRY
+   ════════════════════════════════════ */
+function f3QRStart() {
+  f3QRResetAll();
+  f3QRTimer = setTimeout(function() {
+    var img  = document.getElementById('f3QRImage');
+    var exp  = document.getElementById('f3QRExpired');
+    var card = document.getElementById('f3QRCard');
+    if (img)  img.style.opacity = '0.06';
+    if (exp)  exp.style.display = 'flex';
+    if (card) card.style.cursor = 'pointer';
+  }, 10000);
+}
+
+function f3QRClear() {
+  if (f3QRTimer) { clearTimeout(f3QRTimer); f3QRTimer = null; }
+}
+
+function f3QRResetAll() {
+  var img  = document.getElementById('f3QRImage');
+  var exp  = document.getElementById('f3QRExpired');
+  var card = document.getElementById('f3QRCard');
+  if (img)  img.style.opacity = '1';
+  if (exp)  exp.style.display = 'none';
+  if (card) card.style.cursor = 'default';
+}
+
+function f3QRRefresh() {
+  var exp = document.getElementById('f3QRExpired');
+  if (!exp || exp.style.display === 'none') return;
+  f3QRClear();
+  f3QRResetAll();
+  f3QRStart();
+}
+
+/* ════════════════════════════════════
+   PEEPHOLE / FLOW SELECTOR
+   ════════════════════════════════════ */
+var f3QRSide = 'left';
+
+function f3SetQRSide(side) {
+  f3QRSide = side;
+  var row = document.getElementById('f3TwoColRow');
+  if (row) row.style.flexDirection = side === 'right' ? 'row-reverse' : 'row';
+  var l = document.getElementById('f3PeepQRLeft');
+  var r = document.getElementById('f3PeepQRRight');
+  if (l) { l.style.border = side === 'left' ? '1.5px solid #FE2C55' : '1.5px solid rgba(0,0,0,0.1)'; l.style.background = side === 'left' ? 'rgba(254,44,85,0.05)' : 'white'; l.style.color = side === 'left' ? '#FE2C55' : 'rgba(0,0,0,0.48)'; }
+  if (r) { r.style.border = side === 'right' ? '1.5px solid #FE2C55' : '1.5px solid rgba(0,0,0,0.1)'; r.style.background = side === 'right' ? 'rgba(254,44,85,0.05)' : 'white'; r.style.color = side === 'right' ? '#FE2C55' : 'rgba(0,0,0,0.48)'; }
+}
+
+function toggleFlowSelector() {
+  flowSelectorOpen = !flowSelectorOpen;
+  document.getElementById('peepholeQRToggle').style.display = flowSelectorOpen ? 'block' : 'none';
+  document.getElementById('peepholeIcon').src = flowSelectorOpen ? 'Assets/Icons/Eye_Close.svg' : 'Assets/Icons/Eye_Open.svg';
+}
+
+/* Close overlay on background click */
+document.getElementById('f3Overlay').addEventListener('click', function(e) {
+  if (e.target === this) f3Close();
+});
+
+/* Close peephole on outside click */
+document.addEventListener('click', function(e) {
+  var toggle = document.getElementById('peepholeQRToggle');
+  var btn    = document.getElementById('peepholeBtn');
+  if (flowSelectorOpen && !toggle.contains(e.target) && !btn.contains(e.target)) {
+    toggle.style.display = 'none';
+    document.getElementById('peepholeIcon').src = 'Assets/Icons/Eye_Open.svg';
+    flowSelectorOpen = false;
+  }
+});
+
+/* ════════════════════════════════════
+   "HOW TO SCAN" — Lottie animation
+   On enter: pause QR timer, fade QR out, play looping animation filling the 168px card
+   On leave:  hide animation, fade QR back in, restart timer
+   ════════════════════════════════════ */
+var f3Anim = [null];
+var F3_LOTTIE_PATH = 'Assets/Animation/Navigation-Bar.json';
+
+var F3_IMG_FADE_MS = 560;
+var F3_LOTTIE_FADE_MS = 680;
+var F3_LOTTIE_ENTER_DELAY_MS = 90;
+
+function f3HowToScanEnter() {
+  f3QRClear();
+
+  var exp = document.getElementById('f3QRExpired');
+  if (exp) exp.style.display = 'none';
+
+  var card = document.getElementById('f3QRCard');
+  var img  = document.getElementById('f3QRImage');
+  var wrap = document.getElementById('f3LottieWrap');
+
+  if (!img || !wrap) return;
+
+  img.style.transition = 'opacity ' + F3_IMG_FADE_MS + 'ms cubic-bezier(0.22, 1, 0.36, 1)';
+  wrap.style.transition = 'opacity ' + F3_LOTTIE_FADE_MS + 'ms cubic-bezier(0.22, 1, 0.36, 1)';
+
+  if (card) {
+    card.style.borderColor = 'transparent';
+    card.style.boxShadow = 'none';
+    card.style.background = 'white';
   }
 
-  function f2ToggleDropdown(e, btnId) {
-    e.stopPropagation();
-    f2DropdownOpen = !f2DropdownOpen;
-    if (f2DropdownOpen) {
-      f2RenderDropdown();
-      var dd = document.getElementById('f2CountryDropdown');
-      dd.style.display = 'flex';
-      var btn = document.getElementById(btnId);
-      var card = document.getElementById('widePanelCard');
-      var btnRect = btn.getBoundingClientRect();
-      var cardRect = card.getBoundingClientRect();
-      dd.style.top = (btnRect.bottom - cardRect.top + 6) + 'px';
-      dd.style.left = (btnRect.left - cardRect.left) + 'px';
-      setTimeout(function() {
-        var sel = dd.querySelector('.selected');
-        if (sel) sel.scrollIntoView({ block: 'center' });
-      }, 10);
-    } else {
-      document.getElementById('f2CountryDropdown').style.display = 'none';
-    }
+  wrap.style.display = 'flex';
+  wrap.style.opacity = '0';
+
+  if (!f3Anim[0]) {
+    f3Anim[0] = lottie.loadAnimation({
+      container: wrap,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: F3_LOTTIE_PATH
+    });
+  } else {
+    f3Anim[0].goToAndPlay(0, true);
   }
 
-  function f2SelectCountry(idx) {
-    var c = F2_COUNTRIES[idx];
-    if (!c) return;
-    f2SelCountry = c;
-    var abbrev = F2_SHORT[c.name] || c.name.substring(0, 2).toUpperCase();
-    var label = abbrev + ' ' + c.code;
-    document.getElementById('f2CountryTextPhone').textContent = label;
-    document.getElementById('f2CountryTextPass').textContent = label;
-    f2DropdownOpen = false;
-    document.getElementById('f2CountryDropdown').style.display = 'none';
+  requestAnimationFrame(function() {
+    img.style.opacity = '0';
+
+    setTimeout(function() {
+      wrap.style.opacity = '1';
+    }, F3_LOTTIE_ENTER_DELAY_MS);
+  });
+}
+
+function f3HowToScanLeave() {
+  var card = document.getElementById('f3QRCard');
+  var img  = document.getElementById('f3QRImage');
+  var exp  = document.getElementById('f3QRExpired');
+  var wrap = document.getElementById('f3LottieWrap');
+
+  if (!img || !wrap) return;
+
+  img.style.transition = 'opacity ' + F3_IMG_FADE_MS + 'ms cubic-bezier(0.22, 1, 0.36, 1)';
+  wrap.style.transition = 'opacity ' + F3_LOTTIE_FADE_MS + 'ms cubic-bezier(0.22, 1, 0.36, 1)';
+
+  if (card) {
+    card.style.borderColor = 'rgba(0,0,0,0.05)';
+    card.style.boxShadow = '';
+    card.style.background = 'white';
   }
 
+  requestAnimationFrame(function() {
+    wrap.style.opacity = '0';
 
+    setTimeout(function() {
+      img.style.opacity = (exp && exp.style.display !== 'none') ? '0.06' : '1';
+    }, 70);
+  });
+
+  setTimeout(function() {
+    wrap.style.display = 'none';
+    if (f3Anim[0]) f3Anim[0].pause();
+  }, F3_LOTTIE_FADE_MS);
+
+  setTimeout(function() {
+    f3QRStart();
+  }, F3_LOTTIE_FADE_MS + 40);
+}
 </script>
 </body>
-</html>
+</html> 
