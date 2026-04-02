@@ -255,9 +255,9 @@
     </button>
 
     <!-- Back button: left:28.5px, top:28.5px, 32×32px -->
-    <div id="f3BackBtn" style="display:none;position:absolute;left:32px;top:32px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;z-index:10;flex-shrink:0;" onclick="f3GoBack()">
-      <img src="Assets/Icons/Cheveron_Left_LTR2.svg" width="32" height="32" alt="Back" style="display:block;" />
-    </div>
+<div id="f3BackBtn" style="display:none;position:absolute;left:32px;top:32px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;z-index:10;flex-shrink:0;" onclick="f3GoBackToMain()">
+  <img src="Assets/Icons/Cheveron_Left_LTR2.svg" width="32" height="32" alt="Back" style="display:block;" />
+</div>
 
     <!-- Country dropdown: positioned absolutely inside f3Card -->
     <div id="f3CountryDropdown"></div>
@@ -1333,6 +1333,13 @@ function f3SelectCountry(idx) {
   var cd  = document.getElementById('f3CountryDisplay');
   if (cd)  cd.textContent  = display;
   f3CloseDropdown();
+}
+
+function f3GoBackToMain() {
+  f3ScreenHistory = [];
+  f3OTPClear();
+  f3CloseDropdown();
+  f3ShowScreen('f3ScreenMain', false);
 }
 
 /* Close dropdown on outside click */
