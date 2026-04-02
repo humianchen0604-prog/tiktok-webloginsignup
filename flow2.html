@@ -477,10 +477,6 @@
             </div>
           </div>
 
-          <div style="display:flex;justify-content:flex-start;flex-shrink:0;margin-bottom:8px;">
-            <button onclick="f3GoPassword()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0 16px;line-height:1.3;align-self: flex-end;">Use password</button>
-          </div>
-
           <div style="flex:1;"></div>
 
           <!-- Log in button: 44px, disabled state -->
@@ -876,6 +872,21 @@ function f3Reset() {
 }
 
 function f3GoBack() {
+  var directToMain = ['f3ScreenOTP', 'f3ScreenPassword', 'f3ScreenEmailOTP', 'f3ScreenEmailPassword'];
+  var current = '';
+
+  directToMain.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.style.display === 'flex') current = id;
+  });
+
+  if (current) {
+    f3ScreenHistory = [];
+    f3ShowScreen('f3ScreenMain', false);
+    f3CloseDropdown();
+    return;
+  }
+
   if (f3ScreenHistory.length === 0) return;
   var prev = f3ScreenHistory.pop();
   f3ShowScreen(prev.screen, f3ScreenHistory.length > 0);
