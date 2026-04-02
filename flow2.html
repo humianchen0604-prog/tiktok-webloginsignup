@@ -544,7 +544,7 @@
 
             <!-- "Use code" — right-aligned, 8px below input -->
             <div style="display:flex;justify-content:flex-start;margin-top:10px;">
-              <button onclick="f3GoBack()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0 16px;line-height:1.3;">Use code</button>
+<button onclick="f3GoOTPFromPasswordScreen()" style="background:none;border:none;font-family:inherit;font-size:10px;color:rgba(0,0,0,0.48);cursor:pointer;padding:0 16px;line-height:1.3;">Use code</button>
             </div>
 
           </div>
@@ -872,27 +872,15 @@ function f3Reset() {
 }
 
 function f3GoBack() {
-  var directToMain = ['f3ScreenOTP', 'f3ScreenPassword', 'f3ScreenEmailOTP', 'f3ScreenEmailPassword'];
-  var current = '';
-
-  directToMain.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el && el.style.display === 'flex') current = id;
-  });
-
-  if (current) {
-    f3ScreenHistory = [];
-    f3ShowScreen('f3ScreenMain', false);
-    f3CloseDropdown();
-    return;
-  }
-
   if (f3ScreenHistory.length === 0) return;
+
   var prev = f3ScreenHistory.pop();
   f3ShowScreen(prev.screen, f3ScreenHistory.length > 0);
+
   if (prev.screen === 'f3ScreenLogin') {
     f3SwitchTab(prev.tab || 'phone');
   }
+
   f3CloseDropdown();
 }
 
@@ -938,6 +926,46 @@ function f3ShowPasswordScreen() {
   var btn = document.getElementById('f3PasswordLoginBtn'); if (btn) { btn.style.background = 'rgba(254,44,85,0.4)'; btn.style.cursor = 'not-allowed'; }
   f3CloseDropdown();
 }
+
+function f3GoOTPFromPasswordScreen() {
+  f3ShowScreen('f3ScreenOTP', true);
+  f3OTPReset();
+
+  var raw = (document.getElementById('f3PhoneInput') || {}).value || '';
+  raw = raw.replace(/\D/g, '');
+  var masked = f3SelCountry.code + ' *******' + raw.slice(-3);
+  document.getElementById('f3OTPPhoneDisplay').textContent = masked;
+
+  f3OTPClear();
+  var count = 10;
+  document.getElementById('f3OTPCountdown').textContent = count + 's';
+  var resendBtn = document.getElementById('f3ResendBtn');
+  if (resendBtn) {
+    resendBtn.style.opacity = '0.4';
+    resendBtn.style.cursor = 'not-allowed';
+  }
+
+  f3CountdownInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(f3CountdownInterval);
+      f3CountdownInterval = null;
+      document.getElementById('f3OTPCountdown').textContent = '';
+      if (resendBtn) {
+        resendBtn.style.opacity = '1';
+        resendBtn.style.cursor = 'pointer';
+      }
+    } else {
+      document.getElementById('f3OTPCountdown').textContent = count + 's';
+    }
+  }, 1000);
+
+  setTimeout(function() {
+    var inp = document.getElementById('f3OTPHiddenInput');
+    if (inp) inp.focus();
+  }, 50);
+}
+
 
 function f3GoOTP() {
   var btn = document.getElementById('f3PhoneLoginBtn');
